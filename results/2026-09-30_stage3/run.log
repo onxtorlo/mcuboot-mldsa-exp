@@ -1,0 +1,174 @@
+start 05:13:00
+ok    none  FLASH=26456 RAM=18240
+ok    none_measure  FLASH=27128 RAM=18304
+ok    rsa2048  FLASH=37272 RAM=33664
+ok    rsa2048_measure  FLASH=37976 RAM=33728
+FAIL  rsa2048_mbedtls  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+FAIL  rsa2048_mbedtls_measure  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+ok    rsa2048_psa  FLASH=43464 RAM=27328
+ok    rsa2048_psa_measure  FLASH=44168 RAM=27392
+ok    rsa3072  FLASH=37404 RAM=39552
+ok    rsa3072_measure  FLASH=38104 RAM=39616
+FAIL  rsa3072_mbedtls  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+FAIL  rsa3072_mbedtls_measure  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+ok    rsa3072_psa  FLASH=43592 RAM=27328
+ok    rsa3072_psa_measure  FLASH=44292 RAM=27392
+ok    ecdsa_p256  FLASH=31116 RAM=18240
+ok    ecdsa_p256_measure  FLASH=31828 RAM=18304
+FAIL  ecdsa_p256_mbedtls  error: Aborting due to Kconfig warnings
+FAIL  ecdsa_p256_mbedtls_measure  error: Aborting due to Kconfig warnings
+FAIL  ecdsa_p256_psa  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:54:10: fatal error: psa/crypto.h: No such file or directory
+FAIL  ecdsa_p256_psa_measure  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:54:10: fatal error: psa/crypto.h: No such file or directory
+FAIL  ecdsa_p256_psa_sha512  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:54:10: fatal error: psa/crypto.h: No such file or directory
+FAIL  ecdsa_p256_psa_sha512_measure  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:54:10: fatal error: psa/crypto.h: No such file or directory
+ok    ed25519  FLASH=42232 RAM=18240
+ok    ed25519_measure  FLASH=42944 RAM=18304
+FAIL  ed25519_mbedtls  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+FAIL  ed25519_mbedtls_measure  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+FAIL  ed25519_psa  error: Aborting due to Kconfig warnings
+FAIL  ed25519_psa_measure  error: Aborting due to Kconfig warnings
+ok    ed25519_sha512  FLASH=41184 RAM=18240
+ok    ed25519_sha512_measure  FLASH=41896 RAM=18304
+ok    ed25519_pure  FLASH=42092 RAM=18240
+ok    ed25519_pure_measure  FLASH=42780 RAM=18304
+FAIL  ed25519_pure_mbedtls  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+FAIL  ed25519_pure_mbedtls_measure  /home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+FAIL  ed25519_pure_psa  error: Aborting due to Kconfig warnings
+FAIL  ed25519_pure_psa_measure  error: Aborting due to Kconfig warnings
+ok    ecdsa_p256_psa_fix  FLASH=48020 RAM=20096
+ok    ecdsa_p256_psa_fix_measure  FLASH=48732 RAM=20160
+ok    ecdsa_p256_psa_sha512_fix  FLASH=50848 RAM=20160
+ok    ecdsa_p256_psa_sha512_fix_measure  FLASH=51560 RAM=20224
+ok    ed25519_psa_fix  FLASH=43656 RAM=21184
+ok    ed25519_psa_fix_measure  FLASH=44368 RAM=21248
+ok    ed25519_pure_psa_fix  FLASH=43468 RAM=21184
+ok    ed25519_pure_psa_fix_measure  FLASH=44156 RAM=21248
+FAIL  ecdsa_p256_mbedtls_fix  error: PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_BASIC (defined at modules/mbedtls/Kconfig.psa.logic:36
+FAIL  ecdsa_p256_mbedtls_fix_measure  error: PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_BASIC (defined at modules/mbedtls/Kconfig.psa.logic:36
+FAIL  ed25519_mbedtls_fix  /home/onxtorlo/secureboot/bootloader/mcuboot/ext/fiat/src/curve25519.c:37:10: fatal error: mbedtls/sha512.h: No such file or directory
+FAIL  ed25519_mbedtls_fix_measure  /home/onxtorlo/secureboot/bootloader/mcuboot/ext/fiat/src/curve25519.c:37:10: fatal error: mbedtls/sha512.h: No such file or directory
+builds done 05:38:35
+######## ecdsa_p256
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ecdsa_p256_psa_fix
+      1 == valid image, 10 runs
+     10 I: MEAS result=bad_sig
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ecdsa_p256_psa_sha512_fix
+Usage: imgtool.py sign [OPTIONS] INFILE OUTFILE
+Try 'imgtool.py sign --help' for help.
+
+Error: Key ECDSA256_SHA256 can not be used with --sha 512; allowed sha are one of {allowed}
+measure failed: ecdsa_p256_psa_sha512_fix
+######## ed25519
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ed25519_psa_fix
+      1 == valid image, 10 runs
+     10 I: MEAS result=bad_sig
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ed25519_pure
+      1 == valid image, 10 runs
+     10 I: MEAS result=other
+      1 == reject: bad_payload
+      1 I: MEAS result=other
+      1 == reject: bad_sig
+      1 I: MEAS result=other
+      1 == reject: bad_key
+      1 I: MEAS result=other
+      1 == restore valid image
+######## ed25519_pure_psa_fix
+      1 == valid image, 10 runs
+     10 I: MEAS result=other
+      1 == reject: bad_payload
+      1 I: MEAS result=other
+      1 == reject: bad_sig
+      1 I: MEAS result=other
+      1 == reject: bad_key
+      1 I: MEAS result=other
+      1 == restore valid image
+######## ed25519_sha512
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## none
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == restore valid image
+######## rsa2048
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## rsa2048_psa
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## rsa3072
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## rsa3072_psa
+      1 == valid image, 10 runs
+     10 I: MEAS result=bad_sig
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+comparison: /home/onxtorlo/secureboot/mcuboot-mldsa-exp/results/2026-09-30_stage3/comparison.md
+all done 06:21:32

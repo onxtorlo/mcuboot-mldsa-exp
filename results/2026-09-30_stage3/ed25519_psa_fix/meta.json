@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-30T05:53:56",
+  "board": "stm32f429i_disc1",
+  "conf": "ed25519_psa_fix",
+  "conf_description": "Ed25519 over SHA-256 image hash, PSA API + config workaround (enable Mbed TLS/PSA core explicitly)",
+  "conf_file": "# Ed25519 over SHA-256 image hash, PSA API + config workaround (enable Mbed TLS/PSA core explicitly)\n# KEY=ed25519\n# SIGN=\nCONFIG_BOOT_SIGNATURE_TYPE_ED25519=y\nCONFIG_BOOT_ED25519_PSA=y\nCONFIG_MBEDTLS=y\nCONFIG_PSA_CRYPTO=y\n",
+  "zephyr": {
+    "version": "4.4.2",
+    "commit": "dccb0959",
+    "branch": "",
+    "describe": "dccb0959",
+    "dirty": false
+  },
+  "mcuboot": {
+    "commit": "e45b6b1e",
+    "branch": "sign-replace",
+    "describe": "v2.4.0-2-ge45b6b1e",
+    "dirty": false
+  },
+  "exp": {
+    "commit": "124d1cd",
+    "branch": "dev",
+    "describe": "124d1cd",
+    "dirty": false
+  },
+  "zephyr_sdk": "1.0.1",
+  "boot_builds": [
+    "ed25519_psa_fix_measure",
+    "ed25519_psa_fix"
+  ],
+  "signed_image": {
+    "file": "build/hello_v1/hello_v1_ed25519_psa_fix.bin",
+    "file_bytes": 18112,
+    "header_bytes": 512,
+    "payload_bytes": 17456,
+    "tlv_area_bytes": 144,
+    "tlvs": [
+      {
+        "type": "SHA256",
+        "len": 32
+      },
+      {
+        "type": "KEYHASH",
+        "len": 32
+      },
+      {
+        "type": "ED25519",
+        "len": 64
+      }
+    ]
+  }
+}

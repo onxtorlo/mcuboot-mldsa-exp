@@ -1,0 +1,2 @@
+label,run,time,clock_hz,total_n,total_cyc,total_sum_cyc,total_us,validate_n,validate_cyc,validate_sum_cyc,validate_us,hash_n,hash_cyc,hash_sum_cyc,hash_us,sig_n,sig_cyc,sig_sum_cyc,sig_us,stack_size,stack_used,result,booted,log
+bad_payload,1,2026-09-30T06:06:14,168000000,1,5903523,5903523,35140,1,1673120,1673120,9959,1,1670229,1670229,9941,0,0,0,0,10240,680,hash_mismatch,False,reject_bad_payload.log

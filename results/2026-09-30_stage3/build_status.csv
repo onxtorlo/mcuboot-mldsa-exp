@@ -1,0 +1,49 @@
+conf,variant,status,flash_used,ram_used,error
+none,plain,ok,26456,18240,
+none,measure,ok,27128,18304,
+rsa2048,plain,ok,37272,33664,
+rsa2048,measure,ok,37976,33728,
+rsa2048_mbedtls,plain,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+rsa2048_mbedtls,measure,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+rsa2048_psa,plain,ok,43464,27328,
+rsa2048_psa,measure,ok,44168,27392,
+rsa3072,plain,ok,37404,39552,
+rsa3072,measure,ok,38104,39616,
+rsa3072_mbedtls,plain,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+rsa3072_mbedtls,measure,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+rsa3072_psa,plain,ok,43592,27328,
+rsa3072_psa,measure,ok,44292,27392,
+ecdsa_p256,plain,ok,31116,18240,
+ecdsa_p256,measure,ok,31828,18304,
+ecdsa_p256_mbedtls,plain,fail,,,error: Aborting due to Kconfig warnings
+ecdsa_p256_mbedtls,measure,fail,,,error: Aborting due to Kconfig warnings
+ecdsa_p256_psa,plain,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:54:10: fatal error: psa/crypto.h: No such file or directory
+ecdsa_p256_psa,measure,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:54:10: fatal error: psa/crypto.h: No such file or directory
+ecdsa_p256_psa_sha512,plain,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:54:10: fatal error: psa/crypto.h: No such file or directory
+ecdsa_p256_psa_sha512,measure,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:54:10: fatal error: psa/crypto.h: No such file or directory
+ed25519,plain,ok,42232,18240,
+ed25519,measure,ok,42944,18304,
+ed25519_mbedtls,plain,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+ed25519_mbedtls,measure,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+ed25519_psa,plain,fail,,,error: Aborting due to Kconfig warnings
+ed25519_psa,measure,fail,,,error: Aborting due to Kconfig warnings
+ed25519_sha512,plain,ok,41184,18240,
+ed25519_sha512,measure,ok,41896,18304,
+ed25519_pure,plain,ok,42092,18240,
+ed25519_pure,measure,ok,42780,18304,
+ed25519_pure_mbedtls,plain,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+ed25519_pure_mbedtls,measure,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/boot/bootutil/include/bootutil/crypto/sha.h:61:10: fatal error: mbedtls/sha256.h: No such file or directory
+ed25519_pure_psa,plain,fail,,,error: Aborting due to Kconfig warnings
+ed25519_pure_psa,measure,fail,,,error: Aborting due to Kconfig warnings
+ecdsa_p256_psa_fix,plain,ok,48020,20096,
+ecdsa_p256_psa_fix,measure,ok,48732,20160,
+ecdsa_p256_psa_sha512_fix,plain,ok,50848,20160,
+ecdsa_p256_psa_sha512_fix,measure,ok,51560,20224,
+ed25519_psa_fix,plain,ok,43656,21184,
+ed25519_psa_fix,measure,ok,44368,21248,
+ed25519_pure_psa_fix,plain,ok,43468,21184,
+ed25519_pure_psa_fix,measure,ok,44156,21248,
+ecdsa_p256_mbedtls_fix,plain,fail,,,error: PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_BASIC (defined at modules/mbedtls/Kconfig.psa.logic:36
+ecdsa_p256_mbedtls_fix,measure,fail,,,error: PSA_WANT_KEY_TYPE_ECC_KEY_PAIR_BASIC (defined at modules/mbedtls/Kconfig.psa.logic:36
+ed25519_mbedtls_fix,plain,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/ext/fiat/src/curve25519.c:37:10: fatal error: mbedtls/sha512.h: No such file or directory
+ed25519_mbedtls_fix,measure,fail,,,/home/onxtorlo/secureboot/bootloader/mcuboot/ext/fiat/src/curve25519.c:37:10: fatal error: mbedtls/sha512.h: No such file or directory

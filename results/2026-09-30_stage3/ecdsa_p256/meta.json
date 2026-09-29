@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-30T05:42:59",
+  "board": "stm32f429i_disc1",
+  "conf": "ecdsa_p256",
+  "conf_description": "ECDSA P-256, TinyCrypt (default)",
+  "conf_file": "# ECDSA P-256, TinyCrypt (default)\n# KEY=ecdsa_p256\n# SIGN=\nCONFIG_BOOT_SIGNATURE_TYPE_ECDSA_P256=y\nCONFIG_BOOT_ECDSA_TINYCRYPT=y\n",
+  "zephyr": {
+    "version": "4.4.2",
+    "commit": "dccb0959",
+    "branch": "",
+    "describe": "dccb0959",
+    "dirty": false
+  },
+  "mcuboot": {
+    "commit": "e45b6b1e",
+    "branch": "sign-replace",
+    "describe": "v2.4.0-2-ge45b6b1e",
+    "dirty": false
+  },
+  "exp": {
+    "commit": "124d1cd",
+    "branch": "dev",
+    "describe": "124d1cd",
+    "dirty": false
+  },
+  "zephyr_sdk": "1.0.1",
+  "boot_builds": [
+    "ecdsa_p256_measure",
+    "ecdsa_p256"
+  ],
+  "signed_image": {
+    "file": "build/hello_v1/hello_v1_ecdsa_p256.bin",
+    "file_bytes": 18119,
+    "header_bytes": 512,
+    "payload_bytes": 17456,
+    "tlv_area_bytes": 151,
+    "tlvs": [
+      {
+        "type": "SHA256",
+        "len": 32
+      },
+      {
+        "type": "KEYHASH",
+        "len": 32
+      },
+      {
+        "type": "ECDSA_SIG",
+        "len": 71
+      }
+    ]
+  }
+}

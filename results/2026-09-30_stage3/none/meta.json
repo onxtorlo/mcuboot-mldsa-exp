@@ -1,0 +1,44 @@
+{
+  "date": "2026-09-30T06:06:54",
+  "board": "stm32f429i_disc1",
+  "conf": "none",
+  "conf_description": "No signature: SHA-256 hash check only (TinyCrypt)",
+  "conf_file": "# No signature: SHA-256 hash check only (TinyCrypt)\n# KEY=none\n# SIGN=\nCONFIG_BOOT_SIGNATURE_TYPE_NONE=y\n",
+  "zephyr": {
+    "version": "4.4.2",
+    "commit": "dccb0959",
+    "branch": "",
+    "describe": "dccb0959",
+    "dirty": false
+  },
+  "mcuboot": {
+    "commit": "e45b6b1e",
+    "branch": "sign-replace",
+    "describe": "v2.4.0-2-ge45b6b1e",
+    "dirty": false
+  },
+  "exp": {
+    "commit": "124d1cd",
+    "branch": "dev",
+    "describe": "124d1cd",
+    "dirty": false
+  },
+  "zephyr_sdk": "1.0.1",
+  "boot_builds": [
+    "none_measure",
+    "none"
+  ],
+  "signed_image": {
+    "file": "build/hello_v1/hello_v1_none.bin",
+    "file_bytes": 18008,
+    "header_bytes": 512,
+    "payload_bytes": 17456,
+    "tlv_area_bytes": 40,
+    "tlvs": [
+      {
+        "type": "SHA256",
+        "len": 32
+      }
+    ]
+  }
+}

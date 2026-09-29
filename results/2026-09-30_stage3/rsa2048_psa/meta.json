@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-30T06:14:11",
+  "board": "stm32f429i_disc1",
+  "conf": "rsa2048_psa",
+  "conf_description": "RSA-2048, PSA API",
+  "conf_file": "# RSA-2048, PSA API\n# KEY=rsa2048\n# SIGN=\nCONFIG_BOOT_SIGNATURE_TYPE_RSA=y\nCONFIG_BOOT_SIGNATURE_TYPE_RSA_LEN=2048\nCONFIG_BOOT_RSA_PSA=y\n",
+  "zephyr": {
+    "version": "4.4.2",
+    "commit": "dccb0959",
+    "branch": "",
+    "describe": "dccb0959",
+    "dirty": false
+  },
+  "mcuboot": {
+    "commit": "e45b6b1e",
+    "branch": "sign-replace",
+    "describe": "v2.4.0-2-ge45b6b1e",
+    "dirty": false
+  },
+  "exp": {
+    "commit": "124d1cd",
+    "branch": "dev",
+    "describe": "124d1cd",
+    "dirty": false
+  },
+  "zephyr_sdk": "1.0.1",
+  "boot_builds": [
+    "rsa2048_psa_measure",
+    "rsa2048_psa"
+  ],
+  "signed_image": {
+    "file": "build/hello_v1/hello_v1_rsa2048_psa.bin",
+    "file_bytes": 18304,
+    "header_bytes": 512,
+    "payload_bytes": 17456,
+    "tlv_area_bytes": 336,
+    "tlvs": [
+      {
+        "type": "SHA256",
+        "len": 32
+      },
+      {
+        "type": "KEYHASH",
+        "len": 32
+      },
+      {
+        "type": "RSA2048_PSS",
+        "len": 256
+      }
+    ]
+  }
+}

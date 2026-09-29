@@ -40,7 +40,11 @@ def row_for(d):
         row[f"{s}_cyc_stdev"] = round(statistics.pstdev(v), 1) if v else ""
         row[f"{s}_ms"] = round(statistics.mean(v) / hz * 1000, 3) if v and hz else ""
     row["stack_used"] = ok[0].get("stack_used", "") if ok else ""
-    row["all_booted"] = all(r["booted"] == "True" for r in ok) if ok else ""
+    booted = sum(r["booted"] == "True" for r in ok)
+    row["valid_booted"] = f"{booted}/{len(ok)}"
+    row["valid_result"] = "/".join(sorted({r["result"] for r in ok}))
+    # Timing only means something when the valid image actually verified
+    row["works"] = bool(ok) and booted == len(ok)
     for r in rej:
         row[f"reject_{r['label']}"] = r["result"]
     plain, meas = sizes.get(conf, {}), sizes.get(f"{conf}_measure", {})
@@ -69,23 +73,32 @@ def main():
         w.writeheader()
         w.writerows(rows)
 
+    works = [r for r in rows if r["works"]]
+    broken = [r for r in rows if not r["works"]]
     L = [f"# {os.path.basename(os.path.normpath(stage))}: signature comparison", "",
          "Valid image, mean of all runs (stdev in cycles). ms at 168 MHz.", "",
-         "## Verification time", "",
-         "| Configuration | sig ms | hash ms | validate ms | total ms | sig stdev (cyc) |",
-         "|---|---|---|---|---|---|"]
-    for r in rows:
+         "## Verification time (configurations that boot a valid image)", "",
+         "| Configuration | sig ms | hash ms | validate ms | total ms | sig stdev (cyc) | valid image |",
+         "|---|---|---|---|---|---|---|"]
+    for r in works:
         L.append(f"| {r['conf']} | {r['sig_ms']} | {r['hash_ms']} | {r['validate_ms']} | "
-                 f"{r['total_ms']} | {r['sig_cyc_stdev']} |")
+                 f"{r['total_ms']} | {r['sig_cyc_stdev']} | booted {r['valid_booted']} |")
+    if broken:
+        L += ["", "## Built but rejected the valid image (timings are time to fail, not comparable)", "",
+              "| Configuration | valid image | result | validate ms | sig ms |", "|---|---|---|---|---|"]
+        for r in broken:
+            L.append(f"| {r['conf']} | booted {r['valid_booted']} | {r['valid_result']} | "
+                     f"{r['validate_ms']} | {r['sig_ms'] or '-'} |")
     L += ["", "## Size and memory", "",
           "| Configuration | MCUboot FLASH (B) | MCUboot RAM (B) | stack peak (B) | "
-          "public key (B) | signature (B) | TLV area (B) |",
-          "|---|---|---|---|---|---|---|"]
-    for r in rows:
+          "public key (B) | signature (B) | TLV area (B) | works |",
+          "|---|---|---|---|---|---|---|---|"]
+    for r in works + broken:
         L.append(f"| {r['conf']} | {r['boot_flash_bytes']} | {r['boot_ram_bytes']} | "
                  f"{r['stack_used']} | {r['pubkey_bytes']} | {r['sig_bytes']} | "
-                 f"{r['tlv_area_bytes']} |")
-    L += ["", "MCUboot FLASH/RAM: build without measurement. Stack peak: measurement build.", "",
+                 f"{r['tlv_area_bytes']} | {'yes' if r['works'] else 'no'} |")
+    L += ["", "MCUboot FLASH/RAM: build without measurement. Stack peak: measurement build "
+          "(for configurations that do not work it is the peak up to the failure).", "",
           "## Rejection tests", "",
           "| Configuration | bad payload | bad signature | wrong key |", "|---|---|---|---|"]
     for r in rows:
