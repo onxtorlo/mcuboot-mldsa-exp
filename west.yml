@@ -1,0 +1,37 @@
+# West manifest: ML-DSA signature replacement experiment for MCUboot
+# Board: STM32F429I-DISC1
+#
+#   west init -m https://github.com/onxtorlo/mcuboot-mldsa-exp <workspace>
+#   cd <workspace> && west update
+
+manifest:
+  remotes:
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
+    - name: onxtorlo
+      url-base: https://github.com/onxtorlo
+
+  projects:
+    # Forked MCUboot (based on v2.4.0 = 6d3b3d2c). Overrides the one Zephyr imports.
+    - name: mcuboot
+      remote: onxtorlo
+      revision: sign-replace
+      path: bootloader/mcuboot
+
+    - name: zephyr
+      remote: zephyrproject-rtos
+      revision: v4.4.2
+      import:
+        # Only the modules needed for STM32F4 + MCUboot + ML-DSA
+        name-allowlist:
+          - cmsis
+          - cmsis_6
+          - hal_stm32
+          - mbedtls
+          - tf-psa-crypto
+          - mldsa-native
+          - picolibc
+          - zcbor
+
+  self:
+    path: mcuboot-mldsa-exp
