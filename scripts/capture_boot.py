@@ -23,7 +23,7 @@ import serial
 OPENOCD = ["openocd", "-f", "interface/stlink.cfg", "-f", "target/stm32f4x.cfg",
            "-c", "init; reset run; shutdown"]
 # Stop reading once the boot has clearly finished
-DONE = re.compile(r"Hello World|Unable to find bootable image")
+DONE = re.compile(r"Hello World|Unable to find bootable image|BENCH done")
 STAGE = re.compile(r"MEAS (\w+) n=(\d+) last_cyc=(\d+) sum_cyc=(\d+) last_us=(\d+)")
 STAGES = ["total", "validate", "hash", "sig"]
 FIELDS = (["label", "run", "time", "clock_hz"]
