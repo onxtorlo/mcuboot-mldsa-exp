@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Measure one bootloader build on the board and save every artifact in <outdir>.
-# usage: scripts/measure_boot.sh <sig> <boot name> <runs> <outdir> [<boot name> ...]
+# usage: scripts/measure_boot.sh <conf> <boot name> <runs> <outdir> [<boot name> ...]
 #   e.g. scripts/measure_boot.sh rsa2048 rsa2048_measure 10 results/2026-09-30_stage2_rsa2048 rsa2048
+#   <conf>            names the signed images build/hello_v1/hello_v1_<conf>*.bin
 #   <boot name>       build/boot_<name> to flash (must have CONFIG_BOOT_MEASURE_TIMING)
 #   extra boot names  only recorded in build_size.csv for comparison
 # needs: build/hello_v1/hello_v1_<sig>.bin and _bad_{payload,sig,key}.bin
@@ -51,8 +52,10 @@ for i in $(seq -w 1 "$RUNS"); do
 done
 
 for c in payload sig key; do
+	BAD="$BUILD/hello_v1/hello_v1_${SIG}_bad_$c.bin"
+	[ -e "$BAD" ] || continue   # unsigned configurations have only bad_payload
 	echo "== reject: bad_$c"
-	flash_fresh "$BUILD/hello_v1/hello_v1_${SIG}_bad_$c.bin"
+	flash_fresh "$BAD"
 	"${CAP[@]}" --label "bad_$c" --run 1 --log "$OUT/logs/reject_bad_$c.log" \
 		--csv "$OUT/reject.csv" | grep -E "MEAS result" || true
 done
@@ -62,5 +65,5 @@ flash_fresh "$IMG"
 
 BOOTS=(--boot "$BOOT")
 for b in "$@"; do BOOTS+=(--boot "$b"); done
-python "$EXP/scripts/report.py" meta "$OUT" --image "$IMG" "${BOOTS[@]}" >/dev/null
+python "$EXP/scripts/report.py" meta "$OUT" --conf "$SIG" --image "$IMG" "${BOOTS[@]}" >/dev/null
 python "$EXP/scripts/report.py" summary "$OUT"

@@ -28,7 +28,7 @@ STAGE = re.compile(r"MEAS (\w+) n=(\d+) last_cyc=(\d+) sum_cyc=(\d+) last_us=(\d
 STAGES = ["total", "validate", "hash", "sig"]
 FIELDS = (["label", "run", "time", "clock_hz"]
           + [f"{s}_{k}" for s in STAGES for k in ("n", "cyc", "sum_cyc", "us")]
-          + ["result", "booted", "log"])
+          + ["stack_size", "stack_used", "result", "booted", "log"])
 
 
 def capture(port, seconds, reset):
@@ -62,6 +62,9 @@ def parse(log):
     m = re.search(r"MEAS result=(\w+)", log)
     if m:
         row["result"] = m.group(1)
+    m = re.search(r"MEAS stack size=(\d+) used=(\d+)", log)
+    if m:
+        row["stack_size"], row["stack_used"] = int(m.group(1)), int(m.group(2))
     row["booted"] = "Hello World" in log
     return row
 

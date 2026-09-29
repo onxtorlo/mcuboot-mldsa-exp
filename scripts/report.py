@@ -59,14 +59,30 @@ def cmake_cache(build_dir, key):
     return ""
 
 
-def kconfig(build_dir, names):
+def kconfig(build_dir, pattern):
+    """Options of the final .config whose name (without CONFIG_) matches pattern"""
     out = {}
     with open(os.path.join(build_dir, "zephyr", ".config")) as f:
         for line in f:
-            for n in names:
-                if line.startswith(f"CONFIG_{n}="):
-                    out[n] = line.split("=", 1)[1].strip().strip('"')
+            m = re.match(r"CONFIG_(\w+)=(.*)", line)
+            if m and re.fullmatch(pattern, m.group(1)):
+                out[m.group(1)] = m.group(2).strip().strip('"')
     return out
+
+
+# Signature, crypto backend and hash choices plus sizes that matter for comparison
+KCONFIG_KEEP = (r"BOOT_SIGNATURE_TYPE_\w+|BOOT_(RSA|ECDSA|ED25519)_(TINYCRYPT|MBEDTLS|PSA|"
+                r"MBEDTLS_LEGACY|TF_PSA_CRYPTO_LEGACY)|BOOT_IMG_HASH_ALG_SHA\d+|BOOT_USE_\w+|"
+                r"BOOT_MEASURE_TIMING|MAIN_STACK_SIZE|MBEDTLS_HEAP_SIZE|BOOT_SWAP_USING_\w+")
+
+
+def pubkey_bytes(build_dir):
+    """Length of the public key compiled into MCUboot (autogen-pubkey.c)"""
+    path = os.path.join(build_dir, "zephyr", "autogen-pubkey.c")
+    if not os.path.exists(path):
+        return ""
+    m = re.search(r"_pub_key_len\s*=\s*(\d+)", open(path).read())
+    return int(m.group(1)) if m else ""
 
 
 def build_size(name):
@@ -82,8 +98,8 @@ def build_size(name):
     if os.path.exists(log):
         for region, used in re.findall(r"^\s+(FLASH|RAM):\s+(\d+) B", open(log).read(), re.M):
             row[f"{region.lower()}_used_linker"] = int(used)
-    row.update(kconfig(bdir, ["BOOT_SIGNATURE_TYPE_RSA_LEN", "BOOT_MEASURE_TIMING",
-                              "BOOT_SWAP_USING_SCRATCH", "MAIN_STACK_SIZE"]))
+    row["pubkey_bytes"] = pubkey_bytes(bdir)
+    row.update(kconfig(bdir, KCONFIG_KEEP))
     return row, gcc
 
 
@@ -107,7 +123,9 @@ def cmd_meta(args):
     for name in args.boot:
         row, gcc = build_size(name)
         sizes.append(row)
-    fields = sorted({k for r in sizes for k in r}, key=lambda k: (k != "build", k))
+    first = ["build", "text", "data", "bss", "flash_bytes", "flash_used_linker",
+             "ram_used_linker", "pubkey_bytes"]
+    fields = first + sorted({k for r in sizes for k in r} - set(first))
     with open(os.path.join(args.outdir, "build_size.csv"), "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=fields, restval="")
         w.writeheader()
@@ -115,9 +133,14 @@ def cmd_meta(args):
 
     sdk = re.search(r"(.*/zephyr-sdk-[^/]+)/", gcc)
     sdk_ver = open(os.path.join(sdk.group(1), "sdk_version")).read().strip() if sdk else ""
+    conf_path = os.path.join(EXP, "boot_conf", f"{args.conf}.conf")
+    conf_text = open(conf_path).read() if args.conf else ""
     meta = {
         "date": datetime.datetime.now().isoformat(timespec="seconds"),
         "board": "stm32f429i_disc1",
+        "conf": args.conf,
+        "conf_description": conf_text.splitlines()[0].lstrip("# ") if conf_text else "",
+        "conf_file": conf_text,
         "zephyr": {"version": zephyr_version(), **repo_info(os.path.join(WS, "zephyr"))},
         "mcuboot": repo_info(os.path.join(WS, "bootloader", "mcuboot")),
         "exp": repo_info(EXP),
@@ -147,6 +170,7 @@ def cmd_summary(args):
 
     L += ["## Environment", "", "| Item | Value |", "|---|---|",
           f"| Date | {meta['date']} |", f"| Board | {meta['board']} |",
+          f"| Configuration | {meta.get('conf', '')}: {meta.get('conf_description', '')} |",
           f"| Zephyr | v{meta['zephyr']['version']} ({meta['zephyr']['commit']}) |",
           f"| MCUboot | {meta['mcuboot']['branch']} @ {meta['mcuboot']['commit']}"
           f"{' (dirty)' if meta['mcuboot']['dirty'] else ''} |",
@@ -173,8 +197,11 @@ def cmd_summary(args):
             sd = statistics.pstdev(v)
             L.append(f"| {s} | {statistics.mean(v):,.0f} | {min(v):,} | {max(v):,} | "
                      f"{sd:,.1f} | {statistics.mean(v) / hz * 1000:.2f} |")
+        stack = sorted({(r.get("stack_used", ""), r.get("stack_size", "")) for r in ok})
         L += ["", f"All runs booted: {all(r['booted'] == 'True' for r in ok)}; "
-              f"results: {sorted({r['result'] for r in ok})}", ""]
+              f"results: {sorted({r['result'] for r in ok})}",
+              f"Main stack peak use (bytes used / size): "
+              f"{', '.join(f'{u} / {s}' for u, s in stack if u) or 'n/a'}", ""]
 
     if rej:
         L += ["## Rejection tests", "",
@@ -188,11 +215,13 @@ def cmd_summary(args):
         L.append("")
 
     if sizes:
-        L += ["## Bootloader size", "", "| Build | text | data | bss | FLASH used | RAM used |",
-              "|---|---|---|---|---|---|"]
+        L += ["## Bootloader size", "",
+              "| Build | text | data | bss | FLASH used | RAM used | public key |",
+              "|---|---|---|---|---|---|---|"]
         for r in sizes:
             L.append(f"| {r['build']} | {r['text']} | {r['data']} | {r['bss']} | "
-                     f"{r.get('flash_used_linker', '')} | {r.get('ram_used_linker', '')} |")
+                     f"{r.get('flash_used_linker', '')} | {r.get('ram_used_linker', '')} | "
+                     f"{r.get('pubkey_bytes', '')} |")
         L.append("")
 
     L += ["## Files", ""] + [f"- `{os.path.relpath(p, d)}`" for p in
@@ -210,6 +239,7 @@ def main():
     m.add_argument("outdir")
     m.add_argument("--image", required=True)
     m.add_argument("--boot", action="append", required=True)
+    m.add_argument("--conf", default="")
     s = sub.add_parser("summary")
     s.add_argument("outdir")
     args = ap.parse_args()
