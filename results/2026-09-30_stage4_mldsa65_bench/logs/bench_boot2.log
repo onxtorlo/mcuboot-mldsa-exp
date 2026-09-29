@@ -1,0 +1,16 @@
+# captured 2026-09-30T06:50:31 label=mldsa65_bench run=2
+*** Booting Zephyr OS build dccb09599635 ***
+BENCH mldsa65 clock_hz=168000000 pk=1952 sig=3309 msg=32
+BENCH run=1 case=valid rc=0 cyc=4924307 us=29311
+BENCH run=2 case=valid rc=0 cyc=4924309 us=29311
+BENCH run=3 case=valid rc=0 cyc=4925796 us=29320
+BENCH run=4 case=valid rc=0 cyc=4924306 us=29311
+BENCH run=5 case=valid rc=0 cyc=4924301 us=29311
+BENCH run=6 case=valid rc=0 cyc=4925849 us=29320
+BENCH run=7 case=valid rc=0 cyc=4924309 us=29311
+BENCH run=8 case=valid rc=0 cyc=4924312 us=29311
+BENCH run=9 case=valid rc=0 cyc=4925855 us=29320
+BENCH run=10 case=valid rc=0 cyc=4924305 us=29311
+BENCH run=1 case=bad_sig rc=-1 cyc=456451 us=2716
+BENCH stack size=131072 used=68104
+BENCH done

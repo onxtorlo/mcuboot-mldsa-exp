@@ -11,7 +11,7 @@
 #include <cmsis_core.h>
 #include <mldsa_native.h>
 
-#include "bench_vectors.h"
+#include BENCH_VECTORS
 
 #define RUNS 10
 
@@ -44,7 +44,7 @@ int main(void)
 	DWT->CYCCNT = 0;
 	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
 
-	printf("BENCH mldsa44 clock_hz=%u pk=%u sig=%u msg=%u\n", hz,
+	printf("BENCH mldsa%d clock_hz=%u pk=%u sig=%u msg=%u\n", MLD_CONFIG_PARAMETER_SET, hz,
 	       (unsigned int)sizeof(bench_pk), (unsigned int)sizeof(bench_sig),
 	       (unsigned int)sizeof(bench_msg));
 
