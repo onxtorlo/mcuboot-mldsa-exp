@@ -3,6 +3,7 @@
 # usage: scripts/build_boot.sh <sig> [extra...]   e.g. rsa2048, rsa2048 measure
 #   needs boot_conf/<sig>.conf, keys/<sig>.pem and boot_conf/<extra>.conf
 # output: build/boot_<sig>[_<extra>...]   (flash with: scripts/flash.sh boot <sig>[_<extra>...])
+#         build/boot_<sig>[_<extra>...].build.log
 set -euo pipefail
 source "$(dirname "$0")/env.sh"
 
@@ -15,7 +16,9 @@ for extra in "$@"; do
 	NAME="${NAME}_$extra"
 done
 
+mkdir -p "$BUILD"
 west build -p -b "$BOARD" bootloader/mcuboot/boot/zephyr -d "$BUILD/boot_$NAME" -- \
 	-DEXTRA_DTC_OVERLAY_FILE="$PART_OVERLAY" \
 	-DEXTRA_CONF_FILE="$CONFS" \
-	-DCONFIG_BOOT_SIGNATURE_KEY_FILE="\"$EXP/keys/$SIG.pem\""
+	-DCONFIG_BOOT_SIGNATURE_KEY_FILE="\"$EXP/keys/$SIG.pem\"" \
+	2>&1 | tee "$BUILD/boot_$NAME.build.log"

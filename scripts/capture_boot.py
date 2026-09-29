@@ -3,12 +3,16 @@
 the "MEAS" lines printed by MCUboot (CONFIG_BOOT_MEASURE_TIMING).
 
 usage: scripts/capture_boot.py [--port /dev/ttyACM0] [--seconds 10] [--no-reset]
-                               [--csv results/x.csv --label rsa2048]
+                               [--log out.log] [--csv out.csv --label boot_ok --run 1]
+
+  --log  save the raw serial log (one file per boot)
+  --csv  append one row of parsed values (header written on first use)
 
 Nothing else may have the serial port open (e.g. minicom).
 """
 import argparse
 import csv
+import datetime
 import os
 import re
 import subprocess
@@ -22,9 +26,9 @@ OPENOCD = ["openocd", "-f", "interface/stlink.cfg", "-f", "target/stm32f4x.cfg",
 DONE = re.compile(r"Hello World|Unable to find bootable image")
 STAGE = re.compile(r"MEAS (\w+) n=(\d+) last_cyc=(\d+) sum_cyc=(\d+) last_us=(\d+)")
 STAGES = ["total", "validate", "hash", "sig"]
-FIELDS = (["label", "clock_hz"]
+FIELDS = (["label", "run", "time", "clock_hz"]
           + [f"{s}_{k}" for s in STAGES for k in ("n", "cyc", "sum_cyc", "us")]
-          + ["result", "booted"])
+          + ["result", "booted", "log"])
 
 
 def capture(port, seconds, reset):
@@ -67,17 +71,26 @@ def main():
     ap.add_argument("--port", default="/dev/ttyACM0")
     ap.add_argument("--seconds", type=float, default=10)
     ap.add_argument("--no-reset", action="store_true")
+    ap.add_argument("--log")
     ap.add_argument("--csv")
     ap.add_argument("--label", default="")
+    ap.add_argument("--run", default="")
     args = ap.parse_args()
 
+    stamp = datetime.datetime.now().isoformat(timespec="seconds")
     log = capture(args.port, args.seconds, not args.no_reset)
     print(log.strip())
     row = parse(log)
     print("parsed:", row)
 
+    if args.log:
+        with open(args.log, "w") as f:
+            f.write(f"# captured {stamp} label={args.label} run={args.run}\n")
+            f.write(log)
+
     if args.csv:
-        row = {"label": args.label, **row}
+        row = {"label": args.label, "run": args.run, "time": stamp, **row,
+               "log": os.path.basename(args.log) if args.log else ""}
         new = not os.path.exists(args.csv)
         with open(args.csv, "a", newline="") as f:
             w = csv.DictWriter(f, fieldnames=FIELDS, restval="")
