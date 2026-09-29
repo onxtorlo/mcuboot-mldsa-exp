@@ -104,6 +104,24 @@ python $S/capture_boot.py --csv mcuboot-mldsa-exp/results/rsa2048.csv --label rs
 
 `capture_boot.py` needs the serial port to itself (close minicom first).
 
+A full measurement run (N valid boots + 3 rejection cases, board restored at the
+end) saves everything in one directory under `results/`:
+
+```bash
+$S/build_boot.sh rsa2048 measure && $S/build_boot.sh rsa2048
+$S/measure_boot.sh rsa2048 rsa2048_measure 10 mcuboot-mldsa-exp/results/<date>_<name> rsa2048
+```
+
+| File | Content |
+|---|---|
+| `summary.md` | tables for slides: environment, image layout, timing stats, rejections, sizes |
+| `notes.md` | how to read the run, known issues (written by hand) |
+| `meta.json` | versions, git commits, signed image TLV layout |
+| `boot_ok.csv` / `reject.csv` | one row per boot, cycles per stage |
+| `build_size.csv` | bootloader text/data/bss, FLASH/RAM |
+| `logs/*.log` | raw serial log of every boot |
+| `build_logs/*.log` | west build output of each bootloader |
+
 ## Checks done (RSA-2048)
 
 | Case | Result |

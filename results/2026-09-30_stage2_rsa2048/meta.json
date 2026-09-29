@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-30T04:12:56",
+  "board": "stm32f429i_disc1",
+  "zephyr": {
+    "version": "4.4.2",
+    "commit": "dccb0959",
+    "branch": "",
+    "describe": "dccb0959",
+    "dirty": false
+  },
+  "mcuboot": {
+    "commit": "155e48c2",
+    "branch": "sign-replace",
+    "describe": "v2.4.0-1-g155e48c2",
+    "dirty": false
+  },
+  "exp": {
+    "commit": "bbc09b6",
+    "branch": "dev",
+    "describe": "bbc09b6",
+    "dirty": false
+  },
+  "zephyr_sdk": "1.0.1",
+  "boot_builds": [
+    "rsa2048_measure",
+    "rsa2048"
+  ],
+  "signed_image": {
+    "file": "build/hello_v1/hello_v1_rsa2048.bin",
+    "file_bytes": 18304,
+    "header_bytes": 512,
+    "payload_bytes": 17456,
+    "tlv_area_bytes": 336,
+    "tlvs": [
+      {
+        "type": "SHA256",
+        "len": 32
+      },
+      {
+        "type": "KEYHASH",
+        "len": 32
+      },
+      {
+        "type": "RSA2048_PSS",
+        "len": 256
+      }
+    ]
+  }
+}

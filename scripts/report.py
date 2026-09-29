@@ -44,6 +44,13 @@ def repo_info(path):
             "dirty": bool(git(path, "status", "--porcelain", "--untracked-files=no"))}
 
 
+def zephyr_version():
+    """From zephyr/VERSION (the west checkout is shallow, so git has no tags)"""
+    v = dict(re.findall(r"^(\w+)\s*=\s*(\S*)",
+                        open(os.path.join(WS, "zephyr", "VERSION")).read(), re.M))
+    return f"{v['VERSION_MAJOR']}.{v['VERSION_MINOR']}.{v['PATCHLEVEL']}"
+
+
 def cmake_cache(build_dir, key):
     with open(os.path.join(build_dir, "CMakeCache.txt")) as f:
         for line in f:
@@ -111,7 +118,7 @@ def cmd_meta(args):
     meta = {
         "date": datetime.datetime.now().isoformat(timespec="seconds"),
         "board": "stm32f429i_disc1",
-        "zephyr": repo_info(os.path.join(WS, "zephyr")),
+        "zephyr": {"version": zephyr_version(), **repo_info(os.path.join(WS, "zephyr"))},
         "mcuboot": repo_info(os.path.join(WS, "bootloader", "mcuboot")),
         "exp": repo_info(EXP),
         "zephyr_sdk": sdk_ver,
@@ -140,7 +147,7 @@ def cmd_summary(args):
 
     L += ["## Environment", "", "| Item | Value |", "|---|---|",
           f"| Date | {meta['date']} |", f"| Board | {meta['board']} |",
-          f"| Zephyr | {meta['zephyr']['describe']} |",
+          f"| Zephyr | v{meta['zephyr']['version']} ({meta['zephyr']['commit']}) |",
           f"| MCUboot | {meta['mcuboot']['branch']} @ {meta['mcuboot']['commit']}"
           f"{' (dirty)' if meta['mcuboot']['dirty'] else ''} |",
           f"| exp | {meta['exp']['branch']} @ {meta['exp']['commit']}"
