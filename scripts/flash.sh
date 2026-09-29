@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Flash MCUboot and/or a signed image with OpenOCD.
-# usage: scripts/flash.sh boot <sig>          -> MCUboot at 0x08000000
+# usage: scripts/flash.sh boot <name>         -> MCUboot build/boot_<name> at 0x08000000
 #        scripts/flash.sh slot0 <file.bin>    -> image at slot0
 #        scripts/flash.sh slot1 <file.bin>    -> image at slot1 (upgrade candidate)
 #        scripts/flash.sh erase               -> mass erase both banks
@@ -11,8 +11,8 @@ OCD=(openocd -f interface/stlink.cfg -f target/stm32f4x.cfg)
 
 case "${1:-}" in
 boot)
-	SIG=${2:?usage: $0 boot <sig>}
-	west flash -d "$BUILD/boot_$SIG" --runner openocd
+	NAME=${2:?usage: $0 boot <name>}
+	west flash -d "$BUILD/boot_$NAME" --runner openocd
 	;;
 slot0 | slot1)
 	FILE=${2:?usage: $0 $1 <file.bin>}

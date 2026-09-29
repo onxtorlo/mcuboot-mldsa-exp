@@ -80,12 +80,36 @@ $S/make_bad_images.sh rsa2048 v1
 
 `west flash` defaults to STM32CubeProgrammer; the scripts use `--runner openocd`.
 
+## Measurement
+
+`CONFIG_BOOT_MEASURE_TIMING` (added in the MCUboot fork) counts CPU cycles with
+the Cortex-M DWT counter and prints `MEAS` lines once `boot_go()` returns:
+
+| Stage | Covers |
+|---|---|
+| `total` | bootloader `main()` entry until `boot_go()` returns (includes log output) |
+| `validate` | `bootutil_img_validate()` |
+| `hash` | `bootutil_img_hash()` (SHA-256 over header + payload) |
+| `sig` | `bootutil_verify_sig()` |
+| `result` | last validation: `ok`, `hash_mismatch`, `no_key`, `bad_sig`, `other` |
+
+With the option off the bootloader is byte-identical to the unmodified build.
+
+```bash
+$S/build_boot.sh rsa2048 measure       # boot_conf/rsa2048.conf + boot_conf/measure.conf
+$S/flash.sh boot rsa2048_measure
+python $S/capture_boot.py              # resets the board, prints the log and parsed values
+python $S/capture_boot.py --csv mcuboot-mldsa-exp/results/rsa2048.csv --label rsa2048
+```
+
+`capture_boot.py` needs the serial port to itself (close minicom first).
+
 ## Checks done (RSA-2048)
 
 | Case | Result |
 |---|---|
 | Signed v1 in slot0 | boots `[v1]` |
 | Signed v2 in slot1 (upgrade) | swap-using-scratch, boots `[v2]` |
-| 1 bit flipped in code | rejected |
-| 1 bit flipped in signature | rejected |
-| Signed with another key | rejected |
+| 1 bit flipped in code | rejected, `result=hash_mismatch` |
+| 1 bit flipped in signature | rejected, `result=bad_sig` |
+| Signed with another key | rejected, `result=no_key` |
