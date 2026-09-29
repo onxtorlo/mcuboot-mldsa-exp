@@ -6,3 +6,6 @@ __pycache__/
 *.elf
 *.bin
 *.hex
+
+# Signing keys stay local; each PC generates its own (see README)
+keys/*.pem

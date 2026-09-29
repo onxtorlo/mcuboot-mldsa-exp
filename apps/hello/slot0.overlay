@@ -1,0 +1,6 @@
+/* Run the application from slot0 (partitions come from boot_conf/) */
+/ {
+	chosen {
+		zephyr,code-partition = &slot0_partition;
+	};
+};
