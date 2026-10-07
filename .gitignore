@@ -8,7 +8,8 @@ __pycache__/
 *.hex
 
 # Signing keys stay local; each PC generates its own (see README)
-keys/*.pem
+keys/*
+!keys/.gitkeep
 
 # Editor swap files
 *.swp
