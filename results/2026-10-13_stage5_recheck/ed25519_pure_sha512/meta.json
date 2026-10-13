@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-13T15:54:38",
+  "board": "stm32f429i_disc1",
+  "conf": "ed25519_pure_sha512",
+  "conf_description": "Ed25519 pure (signature over the whole image), TinyCrypt, SHA-512",
+  "conf_file": "# Ed25519 pure (signature over the whole image), TinyCrypt, SHA-512\n# imgtool --pure always uses SHA-512 (64-byte KEYHASH TLV); MCUboot must be built with SHA-512 to accept it\n# KEY=ed25519\n# SIGN=--pure\nCONFIG_BOOT_SIGNATURE_TYPE_ED25519=y\nCONFIG_BOOT_SIGNATURE_TYPE_PURE=y\nCONFIG_BOOT_ED25519_TINYCRYPT=y\nCONFIG_BOOT_IMG_HASH_ALG_SHA512=y\n",
+  "zephyr": {
+    "version": "4.4.2",
+    "commit": "dccb0959",
+    "branch": "",
+    "describe": "dccb0959",
+    "dirty": false
+  },
+  "mcuboot": {
+    "commit": "e45b6b1",
+    "branch": "",
+    "describe": "e45b6b1",
+    "dirty": false
+  },
+  "exp": {
+    "commit": "53ca9e6",
+    "branch": "dev",
+    "describe": "53ca9e6",
+    "dirty": true
+  },
+  "zephyr_sdk": "1.0.1",
+  "boot_builds": [
+    "ed25519_pure_sha512_measure",
+    "ed25519_pure_sha512"
+  ],
+  "signed_image": {
+    "file": "build/hello_v1/hello_v1_ed25519_pure_sha512.bin",
+    "file_bytes": 18181,
+    "header_bytes": 512,
+    "payload_bytes": 17456,
+    "tlv_area_bytes": 213,
+    "tlvs": [
+      {
+        "type": "SHA512",
+        "len": 64
+      },
+      {
+        "type": "SIG_PURE",
+        "len": 1
+      },
+      {
+        "type": "KEYHASH",
+        "len": 64
+      },
+      {
+        "type": "ED25519",
+        "len": 64
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+# captured 2026-10-13T15:42:44 label=bad_sig run=1
+*** Booting MCUboot e45b6b1e6834 ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+E: Image in the primary slot is not valid!
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=365183859 sum_cyc=365183859 last_us=2173713
+I: MEAS validate n=1 last_cyc=360949931 sum_cyc=360949931 last_us=2148511
+I: MEAS hash n=1 last_cyc=1840507 sum_cyc=1840507 last_us=10955
+I: MEAS sig n=1 last_cyc=359085261 sum_cyc=359085261 last_us=2137412
+I: MEAS result=bad_sig
+I: MEAS stack size=10240 used=1608
+E: Unable to find bootable image

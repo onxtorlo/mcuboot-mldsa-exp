@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-13T15:51:09",
+  "board": "stm32f429i_disc1",
+  "conf": "ed25519",
+  "conf_description": "Ed25519 over SHA-256 image hash, TinyCrypt (default)",
+  "conf_file": "# Ed25519 over SHA-256 image hash, TinyCrypt (default)\n# KEY=ed25519\n# SIGN=\nCONFIG_BOOT_SIGNATURE_TYPE_ED25519=y\nCONFIG_BOOT_ED25519_TINYCRYPT=y\n",
+  "zephyr": {
+    "version": "4.4.2",
+    "commit": "dccb0959",
+    "branch": "",
+    "describe": "dccb0959",
+    "dirty": false
+  },
+  "mcuboot": {
+    "commit": "e45b6b1",
+    "branch": "",
+    "describe": "e45b6b1",
+    "dirty": false
+  },
+  "exp": {
+    "commit": "53ca9e6",
+    "branch": "dev",
+    "describe": "53ca9e6",
+    "dirty": true
+  },
+  "zephyr_sdk": "1.0.1",
+  "boot_builds": [
+    "ed25519_measure",
+    "ed25519"
+  ],
+  "signed_image": {
+    "file": "build/hello_v1/hello_v1_ed25519.bin",
+    "file_bytes": 18112,
+    "header_bytes": 512,
+    "payload_bytes": 17456,
+    "tlv_area_bytes": 144,
+    "tlvs": [
+      {
+        "type": "SHA256",
+        "len": 32
+      },
+      {
+        "type": "KEYHASH",
+        "len": 32
+      },
+      {
+        "type": "ED25519",
+        "len": 64
+      }
+    ]
+  }
+}
