@@ -31,6 +31,9 @@ rsa2048) KEY_TYPE=rsa-2048 ;;
 rsa3072) KEY_TYPE=rsa-3072 ;;
 ecdsa_p256) KEY_TYPE=ecdsa-p256 ;;
 ed25519) KEY_TYPE=ed25519 ;;
+mldsa44) KEY_TYPE=ml-dsa-44 ;;
+mldsa65) KEY_TYPE=ml-dsa-65 ;;
+mldsa87) KEY_TYPE=ml-dsa-87 ;;
 *) echo "unknown key type for $KEY" >&2; exit 1 ;;
 esac
 OTHER_KEY="$(mktemp --suffix=.pem)"

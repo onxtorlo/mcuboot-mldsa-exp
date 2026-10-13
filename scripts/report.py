@@ -25,7 +25,8 @@ BUILD = os.path.join(WS, "build")
 
 TLV_NAMES = {0x01: "KEYHASH", 0x02: "PUBKEY", 0x10: "SHA256", 0x11: "SHA384",
              0x12: "SHA512", 0x20: "RSA2048_PSS", 0x22: "ECDSA_SIG",
-             0x23: "RSA3072_PSS", 0x24: "ED25519", 0x25: "SIG_PURE"}
+             0x23: "RSA3072_PSS", 0x24: "ED25519", 0x25: "SIG_PURE",
+             0x26: "MLDSA44", 0x27: "MLDSA65", 0x28: "MLDSA87"}
 STAGES = ["total", "validate", "hash", "sig"]
 
 
@@ -71,7 +72,7 @@ def kconfig(build_dir, pattern):
 
 
 # Signature, crypto backend and hash choices plus sizes that matter for comparison
-KCONFIG_KEEP = (r"BOOT_SIGNATURE_TYPE_\w+|BOOT_(RSA|ECDSA|ED25519)_(TINYCRYPT|MBEDTLS|PSA|"
+KCONFIG_KEEP = (r"BOOT_SIGNATURE_TYPE_\w+|BOOT_MLDSA_\w+|BOOT_(RSA|ECDSA|ED25519)_(TINYCRYPT|MBEDTLS|PSA|"
                 r"MBEDTLS_LEGACY|TF_PSA_CRYPTO_LEGACY)|BOOT_IMG_HASH_ALG_SHA\d+|BOOT_USE_\w+|"
                 r"BOOT_MEASURE_TIMING|MAIN_STACK_SIZE|MBEDTLS_HEAP_SIZE|BOOT_SWAP_USING_\w+")
 
@@ -142,7 +143,7 @@ def cmd_meta(args):
         "conf_description": conf_text.splitlines()[0].lstrip("# ") if conf_text else "",
         "conf_file": conf_text,
         "zephyr": {"version": zephyr_version(), **repo_info(os.path.join(WS, "zephyr"))},
-        "mcuboot": repo_info(os.path.join(WS, "bootloader", "mcuboot")),
+        "mcuboot": repo_info(os.environ.get("MCUBOOT", os.path.join(WS, "bootloader", "mcuboot"))),
         "exp": repo_info(EXP),
         "zephyr_sdk": sdk_ver,
         "boot_builds": args.boot,

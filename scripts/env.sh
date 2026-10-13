@@ -3,7 +3,9 @@ EXP="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WS="$(cd "$EXP/.." && pwd)"                 # west workspace (~/secureboot)
 BOARD=stm32f429i_disc1
 BUILD="$WS/build"
-IMGTOOL="$WS/bootloader/mcuboot/scripts/imgtool.py"
+# MCUboot source tree (bootloader + imgtool); override to use another worktree
+MCUBOOT="${MCUBOOT:-$WS/bootloader/mcuboot}"
+IMGTOOL="$MCUBOOT/scripts/imgtool.py"
 PART_OVERLAY="$EXP/boot_conf/$BOARD.overlay"
 
 # Must match boot_conf/<board>.overlay

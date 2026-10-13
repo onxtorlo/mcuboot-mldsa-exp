@@ -23,7 +23,7 @@ if [ "$KEY" != none ]; then
 fi
 
 mkdir -p "$BUILD"
-west build -p -b "$BOARD" bootloader/mcuboot/boot/zephyr -d "$BUILD/boot_$NAME" -- \
+west build -p -b "$BOARD" "$MCUBOOT/boot/zephyr" -d "$BUILD/boot_$NAME" -- \
 	-DEXTRA_DTC_OVERLAY_FILE="$PART_OVERLAY" \
 	-DEXTRA_CONF_FILE="$CONFS" \
 	"${KEY_ARG[@]}" \
