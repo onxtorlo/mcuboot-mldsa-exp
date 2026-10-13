@@ -1,0 +1,6 @@
+case,expected,booted,verdict
+boot_v1,v1,v1,PASS
+upgrade_v2,v2,v2,PASS
+after_upgrade,v2,v2,PASS
+upgrade_bad_payload,v1,v1,PASS
+upgrade_bad_key,v1,v1,PASS

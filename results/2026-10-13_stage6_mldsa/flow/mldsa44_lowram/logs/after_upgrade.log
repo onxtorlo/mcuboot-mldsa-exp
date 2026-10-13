@@ -1,0 +1,19 @@
+# captured 2026-10-13T17:03:50 label=after_upgrade run=
+*** Booting MCUboot e45b6b1e6834 ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=good, swap_type=0x3, copy_done=0x1, image_ok=0x1
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: none
+I: Image index: 0, Swap type: none
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=7955535 sum_cyc=7955535 last_us=47354
+I: MEAS validate n=1 last_cyc=4674447 sum_cyc=4674447 last_us=27824
+I: MEAS hash n=1 last_cyc=1672043 sum_cyc=1672043 last_us=9952
+I: MEAS sig n=1 last_cyc=2862353 sum_cyc=2862353 last_us=17037
+I: MEAS result=ok
+I: MEAS stack size=36864 used=27304
+I: Bootloader chainload address offset: 0x20000
+I: Image version: v2.0.0
+I: Jumping to the first image slot*** Booting Zephyr OS build dccb09599635 ***
+[v2] Hello World! stm32f429i_disc1/stm32f429xx

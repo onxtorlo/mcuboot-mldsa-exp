@@ -1,0 +1,4 @@
+label,run,time,clock_hz,total_n,total_cyc,total_sum_cyc,total_us,validate_n,validate_cyc,validate_sum_cyc,validate_us,hash_n,hash_cyc,hash_sum_cyc,hash_us,sig_n,sig_cyc,sig_sum_cyc,sig_us,stack_size,stack_used,result,booted,log
+bad_payload,1,2026-10-13T16:50:21,168000000,1,5907875,5907875,35165,1,1673623,1673623,9962,1,1670653,1670653,9944,0,0,0,0,57344,5280,hash_mismatch,False,reject_bad_payload.log
+bad_sig,1,2026-10-13T16:51:01,168000000,1,6572695,6572695,39123,1,2337919,2337919,13916,1,1670653,1670653,9944,1,401202,401202,2388,57344,46780,bad_sig,False,reject_bad_sig.log
+bad_key,1,2026-10-13T16:51:41,168000000,1,6135323,6135323,36519,1,1900447,1900447,11312,1,1670653,1670653,9944,0,0,0,0,57344,5304,no_key,False,reject_bad_key.log
