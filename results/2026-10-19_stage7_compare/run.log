@@ -1,0 +1,76 @@
+start 02:17:22
+ok    rsa2048  FLASH=37276 RAM=33664
+ok    rsa2048_measure  FLASH=37980 RAM=33728
+ok    ecdsa_p256  FLASH=31124 RAM=18240
+ok    ecdsa_p256_measure  FLASH=31836 RAM=18304
+ok    ed25519  FLASH=42240 RAM=18240
+ok    ed25519_measure  FLASH=42952 RAM=18304
+ok    mldsa44  FLASH=37300 RAM=65344
+ok    mldsa44_measure  FLASH=38004 RAM=65408
+ok    mldsa65  FLASH=38044 RAM=89920
+ok    mldsa65_measure  FLASH=38748 RAM=89984
+ok    mldsa87  FLASH=38436 RAM=126784
+ok    mldsa87_measure  FLASH=39156 RAM=126848
+builds done 02:25:50
+######## rsa2048
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ecdsa_p256
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ed25519
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## mldsa44
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## mldsa65
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## mldsa87
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+comparison: /home/onxtorlo/secureboot/mcuboot-mldsa-exp/results/2026-10-19_stage7_compare/comparison.md
+all done 02:48:09

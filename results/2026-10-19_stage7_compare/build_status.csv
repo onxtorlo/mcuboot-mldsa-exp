@@ -1,0 +1,13 @@
+conf,variant,status,flash_used,ram_used,error
+rsa2048,plain,ok,37276,33664,
+rsa2048,measure,ok,37980,33728,
+ecdsa_p256,plain,ok,31124,18240,
+ecdsa_p256,measure,ok,31836,18304,
+ed25519,plain,ok,42240,18240,
+ed25519,measure,ok,42952,18304,
+mldsa44,plain,ok,37300,65344,
+mldsa44,measure,ok,38004,65408,
+mldsa65,plain,ok,38044,89920,
+mldsa65,measure,ok,38748,89984,
+mldsa87,plain,ok,38436,126784,
+mldsa87,measure,ok,39156,126848,
