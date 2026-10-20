@@ -1,0 +1,132 @@
+start 15:31:39
+ok    none  FLASH=26448 RAM=18240
+ok    none_measure  FLASH=27120 RAM=18304
+ok    rsa2048  FLASH=37260 RAM=33664
+ok    rsa2048_measure  FLASH=37964 RAM=33728
+ok    rsa2048_psa  FLASH=43456 RAM=27328
+ok    rsa2048_psa_measure  FLASH=44160 RAM=27392
+ok    rsa3072  FLASH=37392 RAM=39552
+ok    rsa3072_measure  FLASH=38092 RAM=39616
+ok    rsa3072_psa_heap16k  FLASH=43584 RAM=35520
+ok    rsa3072_psa_heap16k_measure  FLASH=44284 RAM=35584
+ok    ecdsa_p256  FLASH=31108 RAM=18240
+ok    ecdsa_p256_measure  FLASH=31820 RAM=18304
+ok    ecdsa_p256_psa_heap  FLASH=49012 RAM=27328
+ok    ecdsa_p256_psa_heap_measure  FLASH=49724 RAM=27392
+ok    ecdsa_p256_psa_heap_nistopt  FLASH=49996 RAM=27328
+ok    ecdsa_p256_psa_heap_nistopt_measure  FLASH=50708 RAM=27392
+ok    ed25519  FLASH=42224 RAM=18240
+ok    ed25519_measure  FLASH=42936 RAM=18304
+ok    ed25519_sha512  FLASH=41176 RAM=18240
+ok    ed25519_sha512_measure  FLASH=41888 RAM=18304
+ok    ed25519_pure_sha512  FLASH=41024 RAM=18240
+ok    ed25519_pure_sha512_measure  FLASH=41712 RAM=18304
+builds done 15:36:35
+######## ecdsa_p256
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ecdsa_p256_psa_heap
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ecdsa_p256_psa_heap_nistopt
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ed25519
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ed25519_pure_sha512
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## ed25519_sha512
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## none
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == restore valid image
+######## rsa2048
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## rsa2048_psa
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## rsa3072
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## rsa3072_psa_heap16k
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+comparison: /home/onxtorlo/secureboot/mcuboot-mldsa-exp/results/2026-10-13_stage5_recheck/comparison.md
+all done 16:14:09

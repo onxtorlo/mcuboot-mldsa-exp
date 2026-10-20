@@ -1,0 +1,120 @@
+start 16:28:11
+ok    mldsa44  FLASH=37288 RAM=65344
+ok    mldsa44_measure  FLASH=37992 RAM=65408
+ok    mldsa65  FLASH=38032 RAM=89920
+ok    mldsa65_measure  FLASH=38736 RAM=89984
+ok    mldsa87  FLASH=38424 RAM=126784
+ok    mldsa87_measure  FLASH=39144 RAM=126848
+ok    mldsa44_lowram  FLASH=36824 RAM=44864
+ok    mldsa44_lowram_measure  FLASH=37528 RAM=44928
+ok    mldsa65_lowram  FLASH=37264 RAM=53056
+ok    mldsa65_lowram_measure  FLASH=37968 RAM=53120
+ok    mldsa87_lowram  FLASH=37944 RAM=65344
+ok    mldsa87_lowram_measure  FLASH=38664 RAM=65408
+ok    rsa2048  FLASH=37268 RAM=33664
+ok    rsa2048_measure  FLASH=37972 RAM=33728
+builds done 16:31:13
+######## mldsa44
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## mldsa65
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## mldsa87
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## mldsa44_lowram
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## mldsa65_lowram
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+######## mldsa87_lowram
+      1 == valid image, 10 runs
+     10 I: MEAS result=ok
+      1 == reject: bad_payload
+      1 I: MEAS result=hash_mismatch
+      1 == reject: bad_sig
+      1 I: MEAS result=bad_sig
+      1 == reject: bad_key
+      1 I: MEAS result=no_key
+      1 == restore valid image
+comparison: /home/onxtorlo/secureboot/mcuboot-mldsa-exp/results/2026-10-13_stage6_mldsa/comparison.md
+######## flow mldsa44
+boot_v1                expect v1   got v1   PASS
+upgrade_v2             expect v2   got v2   PASS
+after_upgrade          expect v2   got v2   PASS
+upgrade_bad_payload    expect v1   got v1   PASS
+upgrade_bad_key        expect v1   got v1   PASS
+######## flow mldsa65
+boot_v1                expect v1   got v1   PASS
+upgrade_v2             expect v2   got v2   PASS
+after_upgrade          expect v2   got v2   PASS
+upgrade_bad_payload    expect v1   got v1   PASS
+upgrade_bad_key        expect v1   got v1   PASS
+######## flow mldsa87
+boot_v1                expect v1   got v1   PASS
+upgrade_v2             expect v2   got v2   PASS
+after_upgrade          expect v2   got v2   PASS
+upgrade_bad_payload    expect v1   got v1   PASS
+upgrade_bad_key        expect v1   got v1   PASS
+######## flow mldsa44_lowram
+boot_v1                expect v1   got v1   PASS
+upgrade_v2             expect v2   got v2   PASS
+after_upgrade          expect v2   got v2   PASS
+upgrade_bad_payload    expect v1   got v1   PASS
+upgrade_bad_key        expect v1   got v1   PASS
+######## flow mldsa65_lowram
+boot_v1                expect v1   got v1   PASS
+upgrade_v2             expect v2   got v2   PASS
+after_upgrade          expect v2   got v2   PASS
+upgrade_bad_payload    expect v1   got v1   PASS
+upgrade_bad_key        expect v1   got v1   PASS
+######## flow mldsa87_lowram
+boot_v1                expect v1   got v1   PASS
+upgrade_v2             expect v2   got v2   PASS
+after_upgrade          expect v2   got v2   PASS
+upgrade_bad_payload    expect v1   got v1   PASS
+upgrade_bad_key        expect v1   got v1   PASS
+######## flow rsa2048
+boot_v1                expect v1   got v1   PASS
+upgrade_v2             expect v2   got v2   PASS
+after_upgrade          expect v2   got v2   PASS
+upgrade_bad_payload    expect v1   got v1   PASS
+upgrade_bad_key        expect v1   got v1   PASS
+all done 17:16:08
