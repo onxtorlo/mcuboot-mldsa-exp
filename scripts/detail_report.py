@@ -48,8 +48,12 @@ def main():
         per_item = {}
         sig = []
         mhz = 168.0
+        incomplete = []
         for log in runs:
             items, stages, clock = read_run(log)
+            if "sig" not in stages:
+                incomplete.append(log.name)   # capture ended before the MEAS report
+                continue
             mhz = clock / 1e6
             sig.append(stages.get("sig", 0))
             for name, (n, cyc) in items.items():
@@ -60,8 +64,10 @@ def main():
             md.append(f"\n### {build}\n\n(no boot_ok logs)\n")
             continue
         sig_mean = statistics.mean(sig)
-        sig_rows.append((build, sig_mean, statistics.pstdev(sig), len(runs)))
-        md.append(f"\n### {build} ({len(runs)} runs)\n")
+        sig_rows.append((build, sig_mean, statistics.pstdev(sig), len(sig)))
+        md.append(f"\n### {build} ({len(sig)} runs)\n")
+        if incomplete:
+            md.append(f"incomplete log, not counted: {', '.join(incomplete)}\n")
         md.append(f"sig stage: {sig_mean:,.0f} cyc = {sig_mean / mhz / 1000:.3f} ms "
                   f"(stdev {statistics.pstdev(sig):.1f} cyc)\n")
         if not per_item:
