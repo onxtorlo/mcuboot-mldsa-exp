@@ -1,5 +1,8 @@
 # 2026-10-22_stage9_detail_all: where the verification time goes (all backends, -Os)
 
+**Final comparison basis is -O3** (decided 2026-10-22): see section 9 and
+../2026-10-22_stage9_detail_all_o3/. The -Os tables below explain where the time goes.
+
 STM32F429I-DISC1, 168 MHz, DWT cycle counter, MCUboot sign-replace @ 6a809c68
 (+ tf-psa-crypto / mldsa-native hooks, exp `patches/`). Same signed images as stage 7
 (one image per key; the TinyCrypt and PSA ECDSA builds verify the very same signature).

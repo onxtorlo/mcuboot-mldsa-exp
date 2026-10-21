@@ -12,7 +12,9 @@ OCD=(openocd -f interface/stlink.cfg -f target/stm32f4x.cfg)
 case "${1:-}" in
 boot)
 	NAME=${2:?usage: $0 boot <name>}
-	west flash -d "$BUILD/boot_$NAME" --runner openocd
+	# --no-rebuild: flash the binary as built; without it west reruns ninja and
+	# picks up source edits made after the build (seen in stage 9).
+	west flash -d "$BUILD/boot_$NAME" --runner openocd --no-rebuild
 	;;
 slot0 | slot1)
 	FILE=${2:?usage: $0 $1 <file.bin>}
