@@ -1,0 +1,2 @@
+build,text,data,bss,flash_bytes,flash_used_linker,ram_used_linker,pubkey_bytes,BOOT_ECDSA_PSA,BOOT_IMG_HASH_ALG_SHA256,BOOT_MEASURE_TIMING,BOOT_SIGNATURE_TYPE_ECDSA_P256,BOOT_SWAP_USING_SCRATCH,BOOT_USE_PSA_CRYPTO,MAIN_STACK_SIZE,MBEDTLS_HEAP_SIZE
+ecdsa_p256_psa_heap_nistopt_measure_sig_detail_sig_prims,53052,152,28380,53204,53204,28544,91,y,y,y,y,y,y,10240,8192

@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-22T04:04:01",
+  "board": "stm32f429i_disc1",
+  "conf": "mldsa44",
+  "conf_description": "ML-DSA-44 over SHA-256 image hash, mldsa-native (portable C)",
+  "conf_file": "# ML-DSA-44 over SHA-256 image hash, mldsa-native (portable C)\n# KEY=mldsa44\n# SIGN=\nCONFIG_BOOT_SIGNATURE_TYPE_MLDSA=y\nCONFIG_BOOT_SIGNATURE_TYPE_MLDSA_44=y\n# ML-DSA verify runs on the main stack (MCUboot default 10 KB); the build checks the minimum\nCONFIG_MAIN_STACK_SIZE=57344\n",
+  "zephyr": {
+    "version": "4.4.2",
+    "commit": "dccb0959",
+    "branch": "",
+    "describe": "dccb0959",
+    "dirty": false
+  },
+  "mcuboot": {
+    "commit": "6a809c68",
+    "branch": "sign-replace",
+    "describe": "v2.4.0-4-g6a809c68",
+    "dirty": false
+  },
+  "exp": {
+    "commit": "00476a4",
+    "branch": "dev",
+    "describe": "00476a4",
+    "dirty": false
+  },
+  "tf_psa_crypto": {
+    "commit": "dc575a2",
+    "branch": "",
+    "describe": "dc575a2",
+    "dirty": true,
+    "diff_sha1": "34f4d2a95805"
+  },
+  "mldsa_native": {
+    "commit": "3fc1998",
+    "branch": "",
+    "describe": "3fc1998",
+    "dirty": true,
+    "diff_sha1": "9de5eb30a179"
+  },
+  "zephyr_sdk": "1.0.1",
+  "boot_builds": [
+    "mldsa44_measure_opt_o3"
+  ],
+  "signed_image": {
+    "file": "build/hello_v1/hello_v1_mldsa44.bin",
+    "file_bytes": 20468,
+    "header_bytes": 512,
+    "payload_bytes": 17456,
+    "tlv_area_bytes": 2500,
+    "tlvs": [
+      {
+        "type": "SHA256",
+        "len": 32
+      },
+      {
+        "type": "KEYHASH",
+        "len": 32
+      },
+      {
+        "type": "MLDSA44",
+        "len": 2420
+      }
+    ]
+  }
+}

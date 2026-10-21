@@ -2,8 +2,9 @@
 
 ## Setup
 
-- MCUboot `sign-replace` @ e0e92c72 + uncommitted instrumentation (committed afterwards,
-  see the commit that adds `CONFIG_BOOT_MEASURE_SIG_DETAIL`); exp `dev` @ a6fca6b +
+- MCUboot `sign-replace` @ e0e92c72 + uncommitted TinyCrypt instrumentation (committed
+  later as 6a809c68 together with the hooks for the other algorithms and the nesting
+  depth counter); exp `dev` @ a6fca6b +
   uncommitted `boot_conf/{sig_detail,sig_prims,opt_o2,opt_o3,opt_lto}.conf`,
   `scripts/detail_report.py`, `SKIP_REJECT` in `measure_boot.sh`. meta.json therefore
   records a dirty tree for this stage.

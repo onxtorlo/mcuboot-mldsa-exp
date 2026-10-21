@@ -1,0 +1,30 @@
+# captured 2026-10-22T04:14:55 label=boot_ok run=10
+*** Booting MCUboot v2.4.0-4-g6a809c6822a0 ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=13431093 sum_cyc=13431093 last_us=79946
+I: MEAS validate n=1 last_cyc=9827818 sum_cyc=9827818 last_us=58498
+I: MEAS hash n=1 last_cyc=1681309 sum_cyc=1681309 last_us=10007
+I: MEAS sig n=1 last_cyc=7892556 sum_cyc=7892556 last_us=46979
+I: MEAS result=ok
+I: MEASD mldsa.verify n=1 sum_cyc=7891905 sum_us=46975
+I: MEASD mldsa.verify.unpack n=1 sum_cyc=133289 sum_us=793
+I: MEASD mldsa.verify.mu n=1 sum_cyc=429496 sum_us=2556
+I: MEASD mldsa.verify.challenge n=1 sum_cyc=53623 sum_us=319
+I: MEASD mldsa.verify.t1 n=1 sum_cyc=264761 sum_us=1575
+I: MEASD mldsa.verify.expand_a n=1 sum_cyc=6025106 sum_us=35863
+I: MEASD mldsa.verify.z_ntt n=1 sum_cyc=206761 sum_us=1230
+I: MEASD mldsa.verify.matmul n=1 sum_cyc=143675 sum_us=855
+I: MEASD mldsa.verify.invntt n=1 sum_cyc=246314 sum_us=1466
+I: MEASD mldsa.verify.w1 n=1 sum_cyc=128618 sum_us=765
+I: MEASD mldsa.verify.c_hash n=1 sum_cyc=183764 sum_us=1093
+I: MEAS stack size=118784 used=110168
+I: Bootloader chainload address offset: 0x20000
+I: Image version: v1.0.0
+I: Jumping to the first image slot*** Booting Zephyr OS build dccb09599635 ***
+[v1] Hello World! stm32f429i_disc1/stm32f429xx

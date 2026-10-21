@@ -1,0 +1,34 @@
+# captured 2026-10-22T03:00:51 label=boot_ok run=03
+*** Booting MCUboot v2.4.0-4-g6a809c6822a0 ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=9671298 sum_cyc=9671298 last_us=57567
+I: MEAS validate n=1 last_cyc=6050497 sum_cyc=6050497 last_us=36014
+I: MEAS hash n=1 last_cyc=1671470 sum_cyc=1671470 last_us=9949
+I: MEAS sig n=1 last_cyc=4357764 sum_cyc=4357764 last_us=25939
+I: MEAS result=ok
+I: MEASD ed25519.key_parse n=1 sum_cyc=637 sum_us=3
+I: MEASD ed25519.verify n=1 sum_cyc=4356866 sum_us=25933
+I: MEASD ed25519.verify.decompress n=1 sum_cyc=245912 sum_us=1463
+I: MEASD ed25519.verify.sha512 n=1 sum_cyc=22068 sum_us=131
+I: MEASD ed25519.verify.sc_reduce n=1 sum_cyc=2027 sum_us=12
+I: MEASD ed25519.verify.smul n=1 sum_cyc=3853576 sum_us=22937
+I: MEASD ed25519.verify.smul.precomp n=1 sum_cyc=137541 sum_us=818
+I: MEASD ed25519.verify.smul.loop n=1 sum_cyc=3715923 sum_us=22118
+I: MEASD ed25519.verify.smul.loop.dbl n=252 sum_cyc=1908123 sum_us=11357
+I: MEASD ed25519.verify.smul.loop.add_a n=41 sum_cyc=510432 sum_us=3038
+I: MEASD ed25519.verify.smul.loop.add_b n=40 sum_cyc=459246 sum_us=2733
+I: MEASD ed25519.verify.encode n=1 sum_cyc=232805 sum_us=1385
+I: MEASD fiat.fe_mul n=1464 sum_cyc=826583 sum_us=4920
+I: MEASD fiat.fe_sq n=1521 sum_cyc=729998 sum_us=4345
+I: MEASD fiat.fe_invert n=1 sum_cyc=229439 sum_us=1365
+I: MEAS stack size=10240 used=4064
+I: Bootloader chainload address offset: 0x20000
+I: Image version: v1.0.0
+I: Jumping to the first image slot*** Booting Zephyr OS build dccb09599635 ***
+[v1] Hello World! stm32f429i_disc1/stm32f429xx

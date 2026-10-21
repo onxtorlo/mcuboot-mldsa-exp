@@ -1,0 +1,17 @@
+# captured 2026-10-22T03:35:52 label=bad_payload run=1
+*** Booting MCUboot v2.4.0-4-g6a809c6822a0 ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+E: Image in the primary slot is not valid!
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=5253149 sum_cyc=5253149 last_us=31268
+I: MEAS validate n=1 last_cyc=1045994 sum_cyc=1045994 last_us=6226
+I: MEAS hash n=1 last_cyc=1043603 sum_cyc=1043603 last_us=6211
+I: MEAS sig n=0 last_cyc=0 sum_cyc=0 last_us=0
+I: MEAS result=hash_mismatch
+I: MEAS stack size=10240 used=1352
+E: Unable to find bootable image

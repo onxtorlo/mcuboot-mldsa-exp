@@ -1,0 +1,27 @@
+# captured 2026-10-22T03:49:32 label=boot_ok run=10
+*** Booting MCUboot v2.4.0-4-g6a809c6822a0 ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=11041366 sum_cyc=11041366 last_us=65722
+I: MEAS validate n=1 last_cyc=7448357 sum_cyc=7448357 last_us=44335
+I: MEAS hash n=1 last_cyc=1034436 sum_cyc=1034436 last_us=6157
+I: MEAS sig n=1 last_cyc=6389177 sum_cyc=6389177 last_us=38030
+I: MEAS result=ok
+I: MEASD rsa.key_parse n=1 sum_cyc=2869 sum_us=17
+I: MEASD rsa.public n=1 sum_cyc=6342497 sum_us=37752
+I: MEASD rsa.pss_mgf1 n=1 sum_cyc=31274 sum_us=186
+I: MEASD rsa.pss_hash n=1 sum_cyc=8378 sum_us=49
+I: MEASD mpi.exp_mod.r2 n=1 sum_cyc=1635418 sum_us=9734
+I: MEASD mpi.exp_mod.to_mont n=1 sum_cyc=123860 sum_us=737
+I: MEASD mpi.exp_mod.core n=1 sum_cyc=4341264 sum_us=25840
+I: MEASD mpi.exp_mod.from_mont n=1 sum_cyc=232146 sum_us=1381
+I: MEAS stack size=10240 used=2648
+I: Bootloader chainload address offset: 0x20000
+I: Image version: v1.0.0
+I: Jumping to the first image slot*** Booting Zephyr OS build dccb09599635 ***
+[v1] Hello World! stm32f429i_disc1/stm32f429xx

@@ -1,0 +1,37 @@
+# captured 2026-10-22T02:46:57 label=boot_ok run=01
+*** Booting MCUboot v2.4.0-4-g6a809c6822a0 ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=377133523 sum_cyc=377133523 last_us=2244842
+I: MEAS validate n=1 last_cyc=373512720 sum_cyc=373512720 last_us=2223290
+I: MEAS hash n=1 last_cyc=1942031 sum_cyc=1942031 last_us=11559
+I: MEAS sig n=1 last_cyc=371536797 sum_cyc=371536797 last_us=2211528
+I: MEAS result=ok
+I: MEASD ecdsa.key_parse n=1 sum_cyc=280072 sum_us=1667
+I: MEASD psa.verify_hash n=1 sum_cyc=371255121 sum_us=2209851
+I: MEASD mbecdsa.verify n=1 sum_cyc=370972604 sum_us=2208170
+I: MEASD mbecdsa.verify.inv_s n=1 sum_cyc=3578230 sum_us=21298
+I: MEASD mbecdsa.verify.u1u2 n=1 sum_cyc=164825 sum_us=981
+I: MEASD mbecdsa.verify.mul_u1g n=1 sum_cyc=93299930 sum_us=555356
+I: MEASD mbecdsa.verify.mul_u2q n=1 sum_cyc=269424746 sum_us=1603718
+I: MEASD mbecdsa.verify.add_norm n=1 sum_cyc=4487431 sum_us=26710
+I: MEASD mbecdsa.verify.final n=1 sum_cyc=1079 sum_us=6
+I: MEASD mpi.mul_mpi n=3918 sum_cyc=14534001 sum_us=86511
+I: MEASD mpi.mod_mpi n=3919 sum_cyc=322053116 sum_us=1916982
+I: MEASD mpi.inv_mod n=6 sum_cyc=21469447 sum_us=127794
+I: MEASD ecp.mul_mod n=3916 sum_cyc=337644633 sum_us=2009789
+I: MEASD ecp.modp n=3916 sum_cyc=322449213 sum_us=1919340
+I: MEASD ecp.double_jac n=308 sum_cyc=221159053 sum_us=1316422
+I: MEASD ecp.add_mixed n=124 sum_cyc=119625720 sum_us=712057
+I: MEASD ecp.normalize n=5 sum_cyc=24653263 sum_us=146745
+I: MEASD ecp.precompute_comb n=1 sum_cyc=156132844 sum_us=929362
+I: MEAS stack size=10240 used=1632
+I: Bootloader chainload address offset: 0x20000
+I: Image version: v1.0.0
+I: Jumping to the first image slot*** Booting Zephyr OS build dccb09599635 ***
+[v1] Hello World! stm32f429i_disc1/stm32f429xx
