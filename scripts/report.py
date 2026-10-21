@@ -10,6 +10,7 @@ usage:
 """
 import argparse
 import csv
+import hashlib
 import datetime
 import glob
 import json
@@ -43,6 +44,14 @@ def repo_info(path):
             "branch": git(path, "branch", "--show-current"),
             "describe": git(path, "describe", "--tags", "--always"),
             "dirty": bool(git(path, "status", "--porcelain", "--untracked-files=no"))}
+
+
+def module_info(path):
+    """repo_info plus a short hash of the local diff (untracked files included)"""
+    info = repo_info(path)
+    diff = git(path, "diff", "HEAD") + git(path, "status", "--porcelain")
+    info["diff_sha1"] = hashlib.sha1(diff.encode()).hexdigest()[:12] if diff else ""
+    return info
 
 
 def zephyr_version():
@@ -145,6 +154,9 @@ def cmd_meta(args):
         "zephyr": {"version": zephyr_version(), **repo_info(os.path.join(WS, "zephyr"))},
         "mcuboot": repo_info(os.environ.get("MCUBOOT", os.path.join(WS, "bootloader", "mcuboot"))),
         "exp": repo_info(EXP),
+        # library modules carrying local measurement hooks (patches/*.diff)
+        "tf_psa_crypto": module_info(os.path.join(WS, "modules", "crypto", "tf-psa-crypto")),
+        "mldsa_native": module_info(os.path.join(WS, "modules", "crypto", "mldsa-native")),
         "zephyr_sdk": sdk_ver,
         "boot_builds": args.boot,
         "signed_image": image_layout(args.image),

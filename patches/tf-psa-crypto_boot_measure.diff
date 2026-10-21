@@ -1,0 +1,528 @@
+diff --git a/drivers/builtin/src/bignum.c b/drivers/builtin/src/bignum.c
+index 385fec8..84f1244 100644
+--- a/drivers/builtin/src/bignum.c
++++ b/drivers/builtin/src/bignum.c
+@@ -29,6 +29,7 @@
+ #include "bignum_core.h"
+ #include "bignum_internal.h"
+ #include "bn_mul.h"
++#include "boot_measure_hooks.h"
+ #include "mbedtls/platform_util.h"
+ #include "mbedtls/private/error_common.h"
+ #include "constant_time_internal.h"
+@@ -1195,7 +1196,7 @@ int mbedtls_mpi_sub_int(mbedtls_mpi *X, const mbedtls_mpi *A, mbedtls_mpi_sint b
+ /*
+  * Baseline multiplication: X = A * B  (HAC 14.12)
+  */
+-int mbedtls_mpi_mul_mpi(mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B)
++static int mbedtls_mpi_mul_mpi_unmeasured(mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B)
+ {
+     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
+     size_t i, j;
+@@ -1252,6 +1253,16 @@ cleanup:
+     return ret;
+ }
+ 
++int mbedtls_mpi_mul_mpi(mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi *B)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_MUL_MPI);
++    ret_m = mbedtls_mpi_mul_mpi_unmeasured(X, A, B);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_MUL_MPI);
++    return ret_m;
++}
++
+ /*
+  * Baseline multiplication: X = A * b
+  */
+@@ -1536,7 +1547,7 @@ int mbedtls_mpi_div_int(mbedtls_mpi *Q, mbedtls_mpi *R,
+ /*
+  * Modulo: R = A mod B
+  */
+-int mbedtls_mpi_mod_mpi(mbedtls_mpi *R, const mbedtls_mpi *A, const mbedtls_mpi *B)
++static int mbedtls_mpi_mod_mpi_unmeasured(mbedtls_mpi *R, const mbedtls_mpi *A, const mbedtls_mpi *B)
+ {
+     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
+ 
+@@ -1559,6 +1570,16 @@ cleanup:
+     return ret;
+ }
+ 
++int mbedtls_mpi_mod_mpi(mbedtls_mpi *R, const mbedtls_mpi *A, const mbedtls_mpi *B)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_MOD_MPI);
++    ret_m = mbedtls_mpi_mod_mpi_unmeasured(R, A, B);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_MOD_MPI);
++    return ret_m;
++}
++
+ /*
+  * Modulo: r = A mod b
+  */
+@@ -1663,7 +1684,10 @@ static int mbedtls_mpi_exp_mod_optionally_safe(mbedtls_mpi *X, const mbedtls_mpi
+      * If 1st call, pre-compute R^2 mod N
+      */
+     if (prec_RR == NULL || prec_RR->p == NULL) {
+-        MBEDTLS_MPI_CHK(mbedtls_mpi_core_get_mont_r2_unsafe(&RR, N));
++        BOOT_MEASURE_D_START(BOOT_MEASURE_D_MPI_EXP_R2);
++        ret = mbedtls_mpi_core_get_mont_r2_unsafe(&RR, N);
++        BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MPI_EXP_R2);
++        MBEDTLS_MPI_CHK(ret);
+ 
+         if (prec_RR != NULL) {
+             *prec_RR = RR;
+@@ -1704,13 +1728,19 @@ static int mbedtls_mpi_exp_mod_optionally_safe(mbedtls_mpi *X, const mbedtls_mpi
+      */
+     {
+         mbedtls_mpi_uint mm = mbedtls_mpi_core_montmul_init(N->p);
++        BOOT_MEASURE_D_START(BOOT_MEASURE_D_MPI_EXP_TO_MONT);
+         mbedtls_mpi_core_to_mont_rep(X->p, X->p, N->p, N->n, mm, RR.p, T);
++        BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MPI_EXP_TO_MONT);
++        BOOT_MEASURE_D_START(BOOT_MEASURE_D_MPI_EXP_CORE);
+         if (E_public == MBEDTLS_MPI_IS_PUBLIC) {
+             mbedtls_mpi_core_exp_mod_unsafe(X->p, X->p, N->p, N->n, E->p, E->n, RR.p, T);
+         } else {
+             mbedtls_mpi_core_exp_mod(X->p, X->p, N->p, N->n, E->p, E->n, RR.p, T);
+         }
++        BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MPI_EXP_CORE);
++        BOOT_MEASURE_D_START(BOOT_MEASURE_D_MPI_EXP_FROM_MONT);
+         mbedtls_mpi_core_from_mont_rep(X->p, X->p, N->p, N->n, mm, T);
++        BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MPI_EXP_FROM_MONT);
+     }
+ 
+     /*
+@@ -1749,7 +1779,7 @@ int mbedtls_mpi_exp_mod_unsafe(mbedtls_mpi *X, const mbedtls_mpi *A,
+ }
+ 
+ /* Constant-time GCD and/or modinv with odd modulus and A <= N */
+-int mbedtls_mpi_gcd_modinv_odd(mbedtls_mpi *G,
++static int mbedtls_mpi_gcd_modinv_odd_unmeasured(mbedtls_mpi *G,
+                                mbedtls_mpi *I,
+                                const mbedtls_mpi *A,
+                                const mbedtls_mpi *N)
+@@ -1818,6 +1848,19 @@ cleanup:
+     return ret;
+ }
+ 
++int mbedtls_mpi_gcd_modinv_odd(mbedtls_mpi *G,
++                               mbedtls_mpi *I,
++                               const mbedtls_mpi *A,
++                               const mbedtls_mpi *N)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_INV_MOD);
++    ret_m = mbedtls_mpi_gcd_modinv_odd_unmeasured(G, I, A, N);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_INV_MOD);
++    return ret_m;
++}
++
+ /*
+  * Greatest common divisor: G = gcd(A, B)
+  * Wrapper around mbedtls_mpi_gcd_modinv() that removes its restrictions.
+diff --git a/drivers/builtin/src/bignum_core.c b/drivers/builtin/src/bignum_core.c
+index fc1b537..c7bcb50 100644
+--- a/drivers/builtin/src/bignum_core.c
++++ b/drivers/builtin/src/bignum_core.c
+@@ -22,6 +22,7 @@
+ #include "bignum_core_invasive.h"
+ #include "bignum_internal.h"
+ #include "bn_mul.h"
++#include "boot_measure_hooks.h"
+ #include "constant_time_internal.h"
+ 
+ size_t mbedtls_mpi_core_clz(mbedtls_mpi_uint a)
+@@ -527,7 +528,7 @@ mbedtls_mpi_uint mbedtls_mpi_core_montmul_init(const mbedtls_mpi_uint *N)
+     return ~x + 1;
+ }
+ 
+-void mbedtls_mpi_core_montmul(mbedtls_mpi_uint *X,
++static void mbedtls_mpi_core_montmul_unmeasured(mbedtls_mpi_uint *X,
+                               const mbedtls_mpi_uint *A,
+                               const mbedtls_mpi_uint *B,
+                               size_t B_limbs,
+@@ -583,6 +584,20 @@ void mbedtls_mpi_core_montmul(mbedtls_mpi_uint *X,
+                          AN_limbs * sizeof(mbedtls_mpi_uint));
+ }
+ 
++void mbedtls_mpi_core_montmul(mbedtls_mpi_uint *X,
++                              const mbedtls_mpi_uint *A,
++                              const mbedtls_mpi_uint *B,
++                              size_t B_limbs,
++                              const mbedtls_mpi_uint *N,
++                              size_t AN_limbs,
++                              mbedtls_mpi_uint mm,
++                              mbedtls_mpi_uint *T)
++{
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_MONTMUL);
++    mbedtls_mpi_core_montmul_unmeasured(X, A, B, B_limbs, N, AN_limbs, mm, T);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_MONTMUL);
++}
++
+ int mbedtls_mpi_core_get_mont_r2_unsafe(mbedtls_mpi *X,
+                                         const mbedtls_mpi *N)
+ {
+diff --git a/drivers/builtin/src/boot_measure_hooks.h b/drivers/builtin/src/boot_measure_hooks.h
+new file mode 100644
+index 0000000..a82d680
+--- /dev/null
++++ b/drivers/builtin/src/boot_measure_hooks.h
+@@ -0,0 +1,26 @@
++/* boot_measure_hooks.h - cycle counting hooks for MCUboot measurements */
++
++/*
++ * Inside an MCUboot build with boot stage timing enabled these map to
++ * bootutil/boot_measure.h (BOOT_MEASURE_D_* steps, BOOT_MEASURE_P_*
++ * primitives); everywhere else they are empty.
++ */
++
++#ifndef TF_PSA_CRYPTO_BOOT_MEASURE_HOOKS_H
++#define TF_PSA_CRYPTO_BOOT_MEASURE_HOOKS_H
++
++#if defined(CONFIG_BOOT_MEASURE_TIMING) && defined(__has_include)
++#if __has_include("bootutil/boot_measure.h")
++#include "bootutil/boot_measure.h"
++#define BOOT_MEASURE_HOOKS_ACTIVE
++#endif
++#endif
++
++#if !defined(BOOT_MEASURE_HOOKS_ACTIVE)
++#define BOOT_MEASURE_D_START(id) ((void)0)
++#define BOOT_MEASURE_D_STOP(id)  ((void)0)
++#define BOOT_MEASURE_P_START(id) ((void)0)
++#define BOOT_MEASURE_P_STOP(id)  ((void)0)
++#endif
++
++#endif /* TF_PSA_CRYPTO_BOOT_MEASURE_HOOKS_H */
+diff --git a/drivers/builtin/src/ecdsa.c b/drivers/builtin/src/ecdsa.c
+index 90a5fe1..cabaaf0 100644
+--- a/drivers/builtin/src/ecdsa.c
++++ b/drivers/builtin/src/ecdsa.c
+@@ -16,6 +16,7 @@
+ #if defined(MBEDTLS_ECDSA_C)
+ 
+ #include "mbedtls/private/ecdsa.h"
++#include "boot_measure_hooks.h"
+ #include "mbedtls/asn1write.h"
+ #include "bignum_internal.h"
+ 
+@@ -462,7 +463,7 @@ int mbedtls_ecdsa_sign_det_ext(mbedtls_ecp_group *grp, mbedtls_mpi *r,
+  * Verify ECDSA signature of hashed message (SEC1 4.1.4)
+  * Obviously, compared to SEC1 4.1.3, we skip step 2 (hash message)
+  */
+-int mbedtls_ecdsa_verify_restartable(mbedtls_ecp_group *grp,
++static int mbedtls_ecdsa_verify_restartable_unmeasured(mbedtls_ecp_group *grp,
+                                      const unsigned char *buf, size_t blen,
+                                      const mbedtls_ecp_point *Q,
+                                      const mbedtls_mpi *r,
+@@ -517,13 +518,18 @@ int mbedtls_ecdsa_verify_restartable(mbedtls_ecp_group *grp,
+      */
+     ECDSA_BUDGET(MBEDTLS_ECP_OPS_CHK + MBEDTLS_ECP_OPS_INV + 2);
+ 
+-    MBEDTLS_MPI_CHK(mbedtls_mpi_gcd_modinv_odd(NULL, &s_inv, s, &grp->N));
++    BOOT_MEASURE_D_START(BOOT_MEASURE_D_MBECDSA_INV_S);
++    ret = mbedtls_mpi_gcd_modinv_odd(NULL, &s_inv, s, &grp->N);
++    BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MBECDSA_INV_S);
++    MBEDTLS_MPI_CHK(ret);
+ 
++    BOOT_MEASURE_D_START(BOOT_MEASURE_D_MBECDSA_U1U2);
+     MBEDTLS_MPI_CHK(mbedtls_mpi_mul_mpi(pu1, &e, &s_inv));
+     MBEDTLS_MPI_CHK(mbedtls_mpi_mod_mpi(pu1, pu1, &grp->N));
+ 
+     MBEDTLS_MPI_CHK(mbedtls_mpi_mul_mpi(pu2, r, &s_inv));
+     MBEDTLS_MPI_CHK(mbedtls_mpi_mod_mpi(pu2, pu2, &grp->N));
++    BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MBECDSA_U1U2);
+ 
+ #if defined(MBEDTLS_ECP_RESTARTABLE)
+     if (rs_ctx != NULL && rs_ctx->ver != NULL) {
+@@ -547,7 +553,10 @@ muladd:
+      * Step 6: convert xR to an integer (no-op)
+      * Step 7: reduce xR mod n (gives v)
+      */
+-    MBEDTLS_MPI_CHK(mbedtls_mpi_mod_mpi(&R.X, &R.X, &grp->N));
++    BOOT_MEASURE_D_START(BOOT_MEASURE_D_MBECDSA_FINAL);
++    ret = mbedtls_mpi_mod_mpi(&R.X, &R.X, &grp->N);
++    BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MBECDSA_FINAL);
++    MBEDTLS_MPI_CHK(ret);
+ 
+     /*
+      * Step 8: check if v (that is, R.X) is equal to r
+@@ -567,6 +576,21 @@ cleanup:
+     return ret;
+ }
+ 
++int mbedtls_ecdsa_verify_restartable(mbedtls_ecp_group *grp,
++                                     const unsigned char *buf, size_t blen,
++                                     const mbedtls_ecp_point *Q,
++                                     const mbedtls_mpi *r,
++                                     const mbedtls_mpi *s,
++                                     mbedtls_ecdsa_restart_ctx *rs_ctx)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_D_MBECDSA_VERIFY);
++    ret_m = mbedtls_ecdsa_verify_restartable_unmeasured(grp, buf, blen, Q, r, s, rs_ctx);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_D_MBECDSA_VERIFY);
++    return ret_m;
++}
++
+ /*
+  * Verify ECDSA signature of hashed message
+  */
+diff --git a/drivers/builtin/src/ecp.c b/drivers/builtin/src/ecp.c
+index ec72714..13e1ce7 100644
+--- a/drivers/builtin/src/ecp.c
++++ b/drivers/builtin/src/ecp.c
+@@ -41,6 +41,7 @@
+ #include "bn_mul.h"
+ #include "bignum_internal.h"
+ #include "ecp_invasive.h"
++#include "boot_measure_hooks.h"
+ 
+ #include <string.h>
+ 
+@@ -952,7 +953,7 @@ int mbedtls_ecp_tls_write_group(const mbedtls_ecp_group *grp, size_t *olen,
+  *
+  * This function is in the critial loop for mbedtls_ecp_mul, so pay attention to perf.
+  */
+-static int ecp_modp(mbedtls_mpi *N, const mbedtls_ecp_group *grp)
++static int ecp_modp_unmeasured(mbedtls_mpi *N, const mbedtls_ecp_group *grp)
+ {
+     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
+ 
+@@ -982,6 +983,16 @@ cleanup:
+     return ret;
+ }
+ 
++static int ecp_modp(mbedtls_mpi *N, const mbedtls_ecp_group *grp)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_ECP_MODP);
++    ret_m = ecp_modp_unmeasured(N, grp);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_ECP_MODP);
++    return ret_m;
++}
++
+ /*
+  * Fast mod-p functions expect their argument to be in the 0..p^2 range.
+  *
+@@ -1008,7 +1019,7 @@ cleanup:
+         INC_MUL_COUNT                                                   \
+     } while (0)
+ 
+-static inline int mbedtls_mpi_mul_mod(const mbedtls_ecp_group *grp,
++static int mbedtls_mpi_mul_mod_unmeasured(const mbedtls_ecp_group *grp,
+                                       mbedtls_mpi *X,
+                                       const mbedtls_mpi *A,
+                                       const mbedtls_mpi *B)
+@@ -1020,6 +1031,19 @@ cleanup:
+     return ret;
+ }
+ 
++static inline int mbedtls_mpi_mul_mod(const mbedtls_ecp_group *grp,
++                                      mbedtls_mpi *X,
++                                      const mbedtls_mpi *A,
++                                      const mbedtls_mpi *B)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_ECP_MUL_MOD);
++    ret_m = mbedtls_mpi_mul_mod_unmeasured(grp, X, A, B);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_ECP_MUL_MOD);
++    return ret_m;
++}
++
+ /*
+  * Reduce a mbedtls_mpi mod p in-place, to use after mbedtls_mpi_sub_mpi
+  * N->s < 0 is a very fast test, which fails only if N is 0
+@@ -1267,7 +1291,7 @@ cleanup:
+  * Normalize jacobian coordinates so that Z == 0 || Z == 1  (GECC 3.2.1)
+  * Cost: 1N := 1I + 3M + 1S
+  */
+-static int ecp_normalize_jac(const mbedtls_ecp_group *grp, mbedtls_ecp_point *pt)
++static int ecp_normalize_jac_unmeasured(const mbedtls_ecp_group *grp, mbedtls_ecp_point *pt)
+ {
+     if (MPI_ECP_CMP_INT(&pt->Z, 0) == 0) {
+         return 0;
+@@ -1292,6 +1316,16 @@ cleanup:
+     return ret;
+ }
+ 
++static int ecp_normalize_jac(const mbedtls_ecp_group *grp, mbedtls_ecp_point *pt)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_ECP_NORM);
++    ret_m = ecp_normalize_jac_unmeasured(grp, pt);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_ECP_NORM);
++    return ret_m;
++}
++
+ /*
+  * Normalize jacobian coordinates of an array of (pointers to) points,
+  * using Montgomery's trick to perform only one inversion mod P.
+@@ -1303,7 +1337,7 @@ cleanup:
+  *
+  * Cost: 1N(t) := 1I + (6t - 3)M + 1S
+  */
+-static int ecp_normalize_jac_many(const mbedtls_ecp_group *grp,
++static int ecp_normalize_jac_many_unmeasured(const mbedtls_ecp_group *grp,
+                                   mbedtls_ecp_point *T[], size_t T_size)
+ {
+     if (T_size < 2) {
+@@ -1386,6 +1420,17 @@ cleanup:
+     return ret;
+ }
+ 
++static int ecp_normalize_jac_many(const mbedtls_ecp_group *grp,
++                                  mbedtls_ecp_point *T[], size_t T_size)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_ECP_NORM);
++    ret_m = ecp_normalize_jac_many_unmeasured(grp, T, T_size);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_ECP_NORM);
++    return ret_m;
++}
++
+ /*
+  * Conditional point inversion: Q -> -Q = (Q.X, -Q.Y, Q.Z) without leak.
+  * "inv" must be 0 (don't invert) or 1 (invert) or the result will be invalid
+@@ -1419,7 +1464,7 @@ cleanup:
+  *             4M + 4S          (A == -3)
+  *             3M + 6S + 1a     otherwise
+  */
+-static int ecp_double_jac(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
++static int ecp_double_jac_unmeasured(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
+                           const mbedtls_ecp_point *P,
+                           mbedtls_mpi tmp[4])
+ {
+@@ -1486,6 +1531,18 @@ cleanup:
+     return ret;
+ }
+ 
++static int ecp_double_jac(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
++                          const mbedtls_ecp_point *P,
++                          mbedtls_mpi tmp[4])
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_ECP_DBL);
++    ret_m = ecp_double_jac_unmeasured(grp, R, P, tmp);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_ECP_DBL);
++    return ret_m;
++}
++
+ /*
+  * Addition: R = P + Q, mixed affine-Jacobian coordinates (GECC 3.22)
+  *
+@@ -1506,7 +1563,7 @@ cleanup:
+  *
+  * Cost: 1A := 8M + 3S
+  */
+-static int ecp_add_mixed(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
++static int ecp_add_mixed_unmeasured(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
+                          const mbedtls_ecp_point *P, const mbedtls_ecp_point *Q,
+                          mbedtls_mpi tmp[4])
+ {
+@@ -1587,6 +1644,18 @@ cleanup:
+     return ret;
+ }
+ 
++static int ecp_add_mixed(const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
++                         const mbedtls_ecp_point *P, const mbedtls_ecp_point *Q,
++                         mbedtls_mpi tmp[4])
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_ECP_ADD);
++    ret_m = ecp_add_mixed_unmeasured(grp, R, P, Q, tmp);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_ECP_ADD);
++    return ret_m;
++}
++
+ /*
+  * Randomize jacobian coordinates:
+  * (X, Y, Z) -> (l^2 X, l^3 Y, l Z) for random l
+@@ -1752,7 +1821,7 @@ static void ecp_comb_recode_core(unsigned char x[], size_t d,
+  * value, it's useful to set MBEDTLS_ECP_WINDOW_SIZE to a lower value in order
+  * to minimize maximum blocking time.
+  */
+-static int ecp_precompute_comb(const mbedtls_ecp_group *grp,
++static int ecp_precompute_comb_unmeasured(const mbedtls_ecp_group *grp,
+                                mbedtls_ecp_point T[], const mbedtls_ecp_point *P,
+                                unsigned char w, size_t d,
+                                mbedtls_ecp_restart_ctx *rs_ctx)
+@@ -1910,6 +1979,19 @@ cleanup:
+     return ret;
+ }
+ 
++static int ecp_precompute_comb(const mbedtls_ecp_group *grp,
++                               mbedtls_ecp_point T[], const mbedtls_ecp_point *P,
++                               unsigned char w, size_t d,
++                               mbedtls_ecp_restart_ctx *rs_ctx)
++{
++    int ret_m;
++
++    BOOT_MEASURE_P_START(BOOT_MEASURE_P_MB_ECP_PRECOMP);
++    ret_m = ecp_precompute_comb_unmeasured(grp, T, P, w, d, rs_ctx);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MB_ECP_PRECOMP);
++    return ret_m;
++}
++
+ /*
+  * Select precomputed point: R = sign(i) * T[ abs(i) / 2 ]
+  *
+@@ -2670,7 +2752,10 @@ int mbedtls_ecp_muladd_restartable(
+     }
+ #endif /* MBEDTLS_ECP_RESTARTABLE */
+ 
+-    MBEDTLS_MPI_CHK(mbedtls_ecp_mul_shortcuts(grp, pmP, m, P, rs_ctx));
++    BOOT_MEASURE_D_START(BOOT_MEASURE_D_MBECDSA_MUL_G);
++    ret = mbedtls_ecp_mul_shortcuts(grp, pmP, m, P, rs_ctx);
++    BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MBECDSA_MUL_G);
++    MBEDTLS_MPI_CHK(ret);
+ #if defined(MBEDTLS_ECP_RESTARTABLE)
+     if (rs_ctx != NULL && rs_ctx->ma != NULL) {
+         rs_ctx->ma->state = ecp_rsma_mul2;
+@@ -2678,7 +2763,10 @@ int mbedtls_ecp_muladd_restartable(
+ 
+ mul2:
+ #endif
+-    MBEDTLS_MPI_CHK(mbedtls_ecp_mul_shortcuts(grp, pR,  n, Q, rs_ctx));
++    BOOT_MEASURE_D_START(BOOT_MEASURE_D_MBECDSA_MUL_Q);
++    ret = mbedtls_ecp_mul_shortcuts(grp, pR,  n, Q, rs_ctx);
++    BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MBECDSA_MUL_Q);
++    MBEDTLS_MPI_CHK(ret);
+ 
+ #if defined(MBEDTLS_ECP_RESTARTABLE)
+     if (rs_ctx != NULL && rs_ctx->ma != NULL) {
+@@ -2688,7 +2776,12 @@ mul2:
+ add:
+ #endif
+     MBEDTLS_ECP_BUDGET(MBEDTLS_ECP_OPS_ADD);
+-    MBEDTLS_MPI_CHK(ecp_add_mixed(grp, pR, pmP, pR, tmp));
++    BOOT_MEASURE_D_START(BOOT_MEASURE_D_MBECDSA_ADD_NORM);
++    ret = ecp_add_mixed(grp, pR, pmP, pR, tmp);
++    if (ret != 0) {
++        BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MBECDSA_ADD_NORM);
++        goto cleanup;
++    }
+ #if defined(MBEDTLS_ECP_RESTARTABLE)
+     if (rs_ctx != NULL && rs_ctx->ma != NULL) {
+         rs_ctx->ma->state = ecp_rsma_norm;
+@@ -2697,7 +2790,9 @@ add:
+ norm:
+ #endif
+     MBEDTLS_ECP_BUDGET(MBEDTLS_ECP_OPS_INV);
+-    MBEDTLS_MPI_CHK(ecp_normalize_jac(grp, pR));
++    ret = ecp_normalize_jac(grp, pR);
++    BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MBECDSA_ADD_NORM);
++    MBEDTLS_MPI_CHK(ret);
+ 
+ #if defined(MBEDTLS_ECP_RESTARTABLE)
+     if (rs_ctx != NULL && rs_ctx->ma != NULL) {

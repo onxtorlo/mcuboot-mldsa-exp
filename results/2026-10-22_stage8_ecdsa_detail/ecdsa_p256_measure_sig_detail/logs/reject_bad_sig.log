@@ -1,0 +1,28 @@
+# captured 2026-10-22T01:44:56 label=bad_sig run=1
+*** Booting MCUboot v2.4.0-3-ge0e92c72472a ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+E: Image in the primary slot is not valid!
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=23934562 sum_cyc=23934562 last_us=142467
+I: MEAS validate n=1 last_cyc=19705952 sum_cyc=19705952 last_us=117297
+I: MEAS hash n=1 last_cyc=1651101 sum_cyc=1651101 last_us=9827
+I: MEAS sig n=1 last_cyc=18034298 sum_cyc=18034298 last_us=107347
+I: MEAS result=bad_sig
+I: MEASD ecdsa.key_parse n=1 sum_cyc=759 sum_us=4
+I: MEASD ecdsa.sig_decode n=1 sum_cyc=455 sum_us=2
+I: MEASD ecdsa.verify n=1 sum_cyc=18032763 sum_us=107337
+I: MEASD ecdsa.verify.load n=1 sum_cyc=3358 sum_us=19
+I: MEASD ecdsa.verify.inv_s n=1 sum_cyc=223229 sum_us=1328
+I: MEASD ecdsa.verify.u1u2 n=1 sum_cyc=331696 sum_us=1974
+I: MEASD ecdsa.verify.g_plus_q n=1 sum_cyc=268383 sum_us=1597
+I: MEASD ecdsa.verify.loop n=1 sum_cyc=16963866 sum_us=100975
+I: MEASD ecdsa.verify.loop.dbl n=255 sum_cyc=8478629 sum_us=50468
+I: MEASD ecdsa.verify.loop.add n=193 sum_cyc=8455174 sum_us=50328
+I: MEASD ecdsa.verify.final n=1 sum_cyc=242100 sum_us=1441
+I: MEAS stack size=10240 used=1424
+E: Unable to find bootable image

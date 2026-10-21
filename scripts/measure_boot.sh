@@ -5,6 +5,7 @@
 #   <conf>            names the signed images build/hello_v1/hello_v1_<conf>*.bin
 #   <boot name>       build/boot_<name> to flash (must have CONFIG_BOOT_MEASURE_TIMING)
 #   extra boot names  only recorded in build_size.csv for comparison
+# SKIP_REJECT=1 skips the bad image cases (e.g. extra builds of an already tested configuration)
 # needs: build/hello_v1/hello_v1_<sig>.bin and _bad_{payload,sig,key}.bin
 #        (scripts/sign_app.sh, scripts/make_bad_images.sh); serial port free
 #
@@ -52,6 +53,7 @@ for i in $(seq -w 1 "$RUNS"); do
 done
 
 for c in payload sig key; do
+	[ -n "${SKIP_REJECT:-}" ] && break   # SKIP_REJECT=1: valid image only
 	BAD="$BUILD/hello_v1/hello_v1_${SIG}_bad_$c.bin"
 	[ -e "$BAD" ] || continue   # unsigned configurations have only bad_payload
 	echo "== reject: bad_$c"

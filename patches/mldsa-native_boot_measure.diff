@@ -1,0 +1,241 @@
+diff --git a/mldsa/src/boot_measure_hooks.h b/mldsa/src/boot_measure_hooks.h
+new file mode 100644
+index 0000000..b17f921
+--- /dev/null
++++ b/mldsa/src/boot_measure_hooks.h
+@@ -0,0 +1,26 @@
++/* boot_measure_hooks.h - cycle counting hooks for MCUboot measurements */
++
++/*
++ * Inside an MCUboot build with boot stage timing enabled these map to
++ * bootutil/boot_measure.h (BOOT_MEASURE_D_* steps, BOOT_MEASURE_P_*
++ * primitives); everywhere else they are empty.
++ */
++
++#ifndef MLD_BOOT_MEASURE_HOOKS_H
++#define MLD_BOOT_MEASURE_HOOKS_H
++
++#if defined(CONFIG_BOOT_MEASURE_TIMING) && defined(__has_include)
++#if __has_include("bootutil/boot_measure.h")
++#include "bootutil/boot_measure.h"
++#define MLD_BOOT_MEASURE_HOOKS_ACTIVE
++#endif
++#endif
++
++#if !defined(MLD_BOOT_MEASURE_HOOKS_ACTIVE)
++#define BOOT_MEASURE_D_START(id) ((void)0)
++#define BOOT_MEASURE_D_STOP(id) ((void)0)
++#define BOOT_MEASURE_P_START(id) ((void)0)
++#define BOOT_MEASURE_P_STOP(id) ((void)0)
++#endif
++
++#endif /* !MLD_BOOT_MEASURE_HOOKS_H */
+diff --git a/mldsa/src/fips202/keccakf1600.c b/mldsa/src/fips202/keccakf1600.c
+index e59120c..77529d6 100644
+--- a/mldsa/src/fips202/keccakf1600.c
++++ b/mldsa/src/fips202/keccakf1600.c
+@@ -31,6 +31,7 @@
+ #include <stdint.h>
+ 
+ #include "keccakf1600.h"
++#include "../boot_measure_hooks.h"
+ #if !defined(MLD_CONFIG_MULTILEVEL_NO_SHARED)
+ 
+ #define MLD_KECCAK_NROUNDS 24
+@@ -406,13 +407,16 @@ static void mld_keccakf1600_permute_c(uint64_t *state)
+ 
+ void mld_keccakf1600_permute(uint64_t *state)
+ {
++  BOOT_MEASURE_P_START(BOOT_MEASURE_P_MLD_KECCAK);
+ #if defined(MLD_USE_FIPS202_X1_NATIVE)
+   if (mld_keccak_f1600_x1_native(state) == MLD_NATIVE_FUNC_SUCCESS)
+   {
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MLD_KECCAK);
+     return;
+   }
+ #endif /* MLD_USE_FIPS202_X1_NATIVE */
+   mld_keccakf1600_permute_c(state);
++  BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MLD_KECCAK);
+ }
+ 
+ #else /* !MLD_CONFIG_MULTILEVEL_NO_SHARED */
+diff --git a/mldsa/src/poly.c b/mldsa/src/poly.c
+index e40534e..5d2d2f8 100644
+--- a/mldsa/src/poly.c
++++ b/mldsa/src/poly.c
+@@ -25,6 +25,7 @@
+ #include "ct.h"
+ #include "debug.h"
+ #include "poly.h"
++#include "boot_measure_hooks.h"
+ #include "reduce.h"
+ #include "rounding.h"
+ #include "symmetric.h"
+@@ -305,6 +306,7 @@ __contract__(
+ MLD_INTERNAL_API
+ void mld_poly_ntt(mld_poly *a)
+ {
++  BOOT_MEASURE_P_START(BOOT_MEASURE_P_MLD_NTT);
+ #if defined(MLD_USE_NATIVE_NTT)
+   int ret;
+   mld_assert_abs_bound(a->coeffs, MLDSA_N, MLDSA_Q);
+@@ -312,10 +314,12 @@ void mld_poly_ntt(mld_poly *a)
+   if (ret == MLD_NATIVE_FUNC_SUCCESS)
+   {
+     mld_assert_abs_bound(a->coeffs, MLDSA_N, MLD_NTT_BOUND);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MLD_NTT);
+     return;
+   }
+ #endif /* MLD_USE_NATIVE_NTT */
+   mld_poly_ntt_c(a);
++  BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MLD_NTT);
+ }
+ 
+ /*************************************************
+@@ -428,6 +432,7 @@ __contract__(
+ MLD_INTERNAL_API
+ void mld_poly_invntt_tomont(mld_poly *a)
+ {
++  BOOT_MEASURE_P_START(BOOT_MEASURE_P_MLD_INVNTT_P);
+ #if defined(MLD_USE_NATIVE_INTT)
+   int ret;
+   mld_assert_abs_bound(a->coeffs, MLDSA_N, MLDSA_Q);
+@@ -435,10 +440,12 @@ void mld_poly_invntt_tomont(mld_poly *a)
+   if (ret == MLD_NATIVE_FUNC_SUCCESS)
+   {
+     mld_assert_abs_bound(a->coeffs, MLDSA_N, MLD_INTT_BOUND);
++    BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MLD_INVNTT_P);
+     return;
+   }
+ #endif /* MLD_USE_NATIVE_INTT */
+   mld_poly_invntt_tomont_c(a);
++  BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MLD_INVNTT_P);
+ }
+ 
+ MLD_STATIC_TESTABLE void mld_poly_pointwise_montgomery_c(mld_poly *c,
+@@ -633,6 +640,7 @@ void mld_poly_uniform(mld_poly *a, const uint8_t seed[MLDSA_SEEDBYTES + 2])
+   MLD_ALIGN uint8_t buf[MLD_POLY_UNIFORM_NBLOCKS * MLD_STREAM128_BLOCKBYTES];
+   mld_xof128_ctx state;
+ 
++  BOOT_MEASURE_P_START(BOOT_MEASURE_P_MLD_UNIFORM);
+   mld_xof128_init(&state);
+   mld_xof128_absorb_once(&state, seed, MLDSA_SEEDBYTES + 2);
+   mld_xof128_squeezeblocks(buf, MLD_POLY_UNIFORM_NBLOCKS, &state);
+@@ -655,6 +663,7 @@ void mld_poly_uniform(mld_poly *a, const uint8_t seed[MLDSA_SEEDBYTES + 2])
+ 
+   /* @[FIPS204, Section 3.6.3] Destruction of intermediate values. */
+   mld_zeroize(buf, sizeof(buf));
++  BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MLD_UNIFORM);
+ }
+ 
+ #if !defined(MLD_CONFIG_SERIAL_FIPS202_ONLY) && !defined(MLD_CONFIG_REDUCE_RAM)
+@@ -672,6 +681,7 @@ void mld_poly_uniform_4x(mld_poly *vec0, mld_poly *vec1, mld_poly *vec2,
+   mld_xof128_x4_ctx state;
+   unsigned buflen;
+ 
++  BOOT_MEASURE_P_START(BOOT_MEASURE_P_MLD_UNIFORM);
+   mld_xof128_x4_init(&state);
+   mld_xof128_x4_absorb(&state, seed, MLDSA_SEEDBYTES + 2);
+ 
+@@ -720,6 +730,7 @@ void mld_poly_uniform_4x(mld_poly *vec0, mld_poly *vec1, mld_poly *vec2,
+ 
+   /* @[FIPS204, Section 3.6.3] Destruction of intermediate values. */
+   mld_zeroize(buf, sizeof(buf));
++  BOOT_MEASURE_P_STOP(BOOT_MEASURE_P_MLD_UNIFORM);
+ }
+ 
+ #endif /* !MLD_CONFIG_SERIAL_FIPS202_ONLY && !MLD_CONFIG_REDUCE_RAM */
+diff --git a/mldsa/src/sign.c b/mldsa/src/sign.c
+index 32bba52..a1538fd 100644
+--- a/mldsa/src/sign.c
++++ b/mldsa/src/sign.c
+@@ -36,6 +36,7 @@
+ #include "polyvec.h"
+ #include "randombytes.h"
+ #include "sign.h"
++#include "boot_measure_hooks.h"
+ #include "symmetric.h"
+ 
+ /* Parameter set namespacing
+@@ -1005,6 +1006,7 @@ int mld_sign_verify_internal(const uint8_t *sig, size_t siglen,
+   MLD_ALLOC(tmp, mld_polyveck, 1, context);
+   MLD_ALLOC(h, mld_polyveck, 1, context);
+ 
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_VERIFY);
+   if (buf == NULL || rho == NULL || mu == NULL || c == NULL || c2 == NULL ||
+       cp == NULL || mat == NULL || z == NULL || t1w1 == NULL || tmp == NULL ||
+       h == NULL)
+@@ -1021,6 +1023,7 @@ int mld_sign_verify_internal(const uint8_t *sig, size_t siglen,
+     goto cleanup;
+   }
+ 
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_UNPACK);
+   mld_unpack_pk(rho, t1, pk);
+ 
+   /* mld_unpack_sig and mld_polyvecl_chknorm signal failure through a
+@@ -1036,7 +1039,9 @@ int mld_sign_verify_internal(const uint8_t *sig, size_t siglen,
+     ret = MLD_ERR_FAIL;
+     goto cleanup;
+   }
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_UNPACK);
+ 
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_MU);
+   if (!externalmu)
+   {
+     /* Compute CRH(H(rho, t1), pre, msg) */
+@@ -1054,29 +1059,47 @@ int mld_sign_verify_internal(const uint8_t *sig, size_t siglen,
+     mld_memcpy(mu, m, MLDSA_CRHBYTES);
+   }
+ 
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_MU);
++
+   /* Matrix-vector multiplication; compute Az - c2^dt1 */
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_CHALLENGE);
+   mld_poly_challenge(cp, c);
+   mld_poly_ntt(cp);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_CHALLENGE);
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_T1);
+   mld_polyveck_shiftl(t1);
+   mld_polyveck_ntt(t1);
+   mld_polyveck_pointwise_poly_montgomery(tmp, cp, t1);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_T1);
+ 
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_EXPAND_A);
+   mld_polyvec_matrix_expand(mat, rho);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_EXPAND_A);
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_Z_NTT);
+   mld_polyvecl_ntt(z);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_Z_NTT);
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_MATMUL);
+   mld_polyvec_matrix_pointwise_montgomery(w1, mat, z);
+   mld_polyveck_sub(w1, tmp);
+   mld_polyveck_reduce(w1);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_MATMUL);
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_INVNTT);
+   mld_polyveck_invntt_tomont(w1);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_INVNTT);
+ 
+   /* Reconstruct w1 */
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_W1);
+   mld_polyveck_caddq(w1);
+   mld_polyveck_use_hint(tmp, w1, h);
+   mld_polyveck_pack_w1(buf, tmp);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_W1);
+   /* Call random oracle and verify challenge */
++  BOOT_MEASURE_D_START(BOOT_MEASURE_D_MLD_C_HASH);
+   mld_H(c2, MLDSA_CTILDEBYTES, mu, MLDSA_CRHBYTES, buf,
+         MLDSA_K * MLDSA_POLYW1_PACKEDBYTES, NULL, 0);
+ 
+   cmp = mld_ct_memcmp(c, c2, MLDSA_CTILDEBYTES);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_C_HASH);
+ 
+   /* Declassify the result of the verification. */
+   MLD_CT_TESTING_DECLASSIFY(&cmp, sizeof(cmp));
+@@ -1096,6 +1119,7 @@ cleanup:
+   MLD_FREE(mu, uint8_t, MLDSA_CRHBYTES, context);
+   MLD_FREE(rho, uint8_t, MLDSA_SEEDBYTES, context);
+   MLD_FREE(buf, uint8_t, (MLDSA_K * MLDSA_POLYW1_PACKEDBYTES), context);
++  BOOT_MEASURE_D_STOP(BOOT_MEASURE_D_MLD_VERIFY);
+   return ret;
+ }
+ 

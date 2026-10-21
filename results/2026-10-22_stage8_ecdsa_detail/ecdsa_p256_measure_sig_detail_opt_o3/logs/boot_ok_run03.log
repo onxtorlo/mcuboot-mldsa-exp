@@ -1,0 +1,30 @@
+# captured 2026-10-22T02:06:20 label=boot_ok run=03
+*** Booting MCUboot v2.4.0-3-ge0e92c72472a ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: none
+I: MEAS clock_hz=168000000
+I: MEAS total n=1 last_cyc=16875362 sum_cyc=16875362 last_us=100448
+I: MEAS validate n=1 last_cyc=13291107 sum_cyc=13291107 last_us=79113
+I: MEAS hash n=1 last_cyc=1580653 sum_cyc=1580653 last_us=9408
+I: MEAS sig n=1 last_cyc=11693586 sum_cyc=11693586 last_us=69604
+I: MEAS result=ok
+I: MEASD ecdsa.key_parse n=1 sum_cyc=541 sum_us=3
+I: MEASD ecdsa.sig_decode n=1 sum_cyc=284 sum_us=1
+I: MEASD ecdsa.verify n=1 sum_cyc=11692453 sum_us=69597
+I: MEASD ecdsa.verify.load n=1 sum_cyc=2986 sum_us=17
+I: MEASD ecdsa.verify.inv_s n=1 sum_cyc=165586 sum_us=985
+I: MEASD ecdsa.verify.u1u2 n=1 sum_cyc=277237 sum_us=1650
+I: MEASD ecdsa.verify.g_plus_q n=1 sum_cyc=194298 sum_us=1156
+I: MEASD ecdsa.verify.loop n=1 sum_cyc=10875868 sum_us=64737
+I: MEASD ecdsa.verify.loop.dbl n=255 sum_cyc=5416810 sum_us=32242
+I: MEASD ecdsa.verify.loop.add n=195 sum_cyc=5436216 sum_us=32358
+I: MEASD ecdsa.verify.final n=1 sum_cyc=176403 sum_us=1050
+I: MEAS stack size=10240 used=1472
+I: Bootloader chainload address offset: 0x20000
+I: Image version: v1.0.0
+I: Jumping to the first image slot*** Booting Zephyr OS build dccb09599635 ***
+[v1] Hello World! stm32f429i_disc1/stm32f429xx
