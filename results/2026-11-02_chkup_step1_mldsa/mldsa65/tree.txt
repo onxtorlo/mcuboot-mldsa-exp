@@ -1,0 +1,329 @@
+# .ci files: 154, defined functions: 1610, call edges: 2816
+# reachable from main after pruning: 197 crypto=4, flash=14, indirect=1, mcuboot=168, undefined=10
+main
+  mcuboot_watchdog_setup [no definition in build]  @boot/zephyr/main.c:533:5
+  mcuboot_watchdog_feed [no definition in build]  @boot/zephyr/main.c:534:5
+  os_heap_init  @boot/zephyr/main.c:547:5
+  boot_go  @boot/zephyr/main.c:634:9
+    boot_state_init  @boot/bootutil/src/loader.c:2482:5
+    context_boot_go  @boot/bootutil/src/loader.c:2484:5
+      boot_open_all_flash_areas  @boot/bootutil/src/loader.c:1741:10
+        flash_area_id_from_multi_image_slot  @boot/bootutil/src/bootutil_loader.c:329:21
+          __flash_area_ids_for_slot  @boot/zephyr/flash_map_extended.c:105:20
+          __flash_area_ids_for_slot  @boot/zephyr/flash_map_extended.c:107:20
+        flash_area_open [flash]  @boot/bootutil/src/bootutil_loader.c:330:18
+        flash_area_open [flash] (see above)  @boot/bootutil/src/bootutil_loader.c:342:10
+      boot_read_sectors  @boot/bootutil/src/loader.c:1765:14
+        boot_initialize_area  @boot/bootutil/src/bootutil_misc.c:520:10
+          __flash_area_ids_for_slot  @boot/bootutil/src/bootutil_misc.c:445:23
+          __flash_area_ids_for_slot  @boot/bootutil/src/bootutil_misc.c:449:30
+          flash_area_get_sectors [flash]  @boot/bootutil/src/bootutil_misc.c:463:10
+        __flash_area_ids_for_slot  @boot/bootutil/src/bootutil_misc.c:520:38
+        boot_initialize_area (see above)  @boot/bootutil/src/bootutil_misc.c:526:10
+        __flash_area_ids_for_slot  @boot/bootutil/src/bootutil_misc.c:526:38
+        boot_initialize_area (see above)  @boot/bootutil/src/bootutil_misc.c:533:10
+        boot_write_sz  @boot/bootutil/src/bootutil_misc.c:540:28
+          flash_area_align [flash]  @boot/bootutil/src/bootutil_misc.c:487:15
+          flash_area_align [flash] (see above)  @boot/bootutil/src/bootutil_misc.c:489:13
+      boot_prepare_image_for_update  @boot/bootutil/src/loader.c:1778:13
+        boot_read_image_headers  @boot/bootutil/src/loader.c:1453:10
+          boot_img_hdr  @boot/bootutil/src/bootutil_loader.c:140:18
+          boot_read_image_header  @boot/bootutil/src/bootutil_loader.c:140:18
+            boot_status_is_reset  @boot/bootutil/src/swap_scratch.c:1083:16
+            boot_find_status  @boot/bootutil/src/swap_scratch.c:1084:15
+              flash_area_read [flash]  @boot/bootutil/src/bootutil_misc.c:189:14
+              boot_magic_off  @boot/bootutil/src/bootutil_misc.c:189:36
+                flash_area_get_size  @boot/bootutil/src/bootutil_misc.h:31:12
+              flash_area_get_id  @boot/bootutil/src/bootutil_misc.c:192:13
+              boot_magic_decode  @boot/bootutil/src/bootutil_misc.c:198:32
+                memcmp [no definition in build]  @boot/bootutil/src/bootutil_misc.h:22:9
+            boot_read_swap_size  @boot/bootutil/src/swap_scratch.c:1091:14
+              boot_swap_size_off  @boot/bootutil/src/bootutil_misc.c:212:11
+                boot_swap_info_off  @boot/bootutil/src/bootutil_misc.h:62:12
+                  boot_copy_done_off  @boot/bootutil/src/bootutil_public.c:167:12
+                    boot_image_ok_off  @boot/bootutil/src/bootutil_misc.h:43:12
+                      boot_magic_off  @boot/bootutil/src/bootutil_misc.h:37:12
+                        flash_area_get_size  @boot/bootutil/src/bootutil_misc.h:31:12
+              flash_area_read [flash] (see above)  @boot/bootutil/src/bootutil_misc.c:213:10
+            flash_area_close [flash]  @boot/bootutil/src/swap_scratch.c:1092:9
+            find_swap_count  @boot/bootutil/src/swap_scratch.c:1099:22
+              find_last_sector_idx  @boot/bootutil/src/swap_scratch.c:653:23
+                boot_img_sector_size  @boot/bootutil/src/swap_scratch.c:616:33
+                  flash_sector_get_size  @boot/bootutil/src/bootutil_priv.h:496:12
+                boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:623:35
+              boot_copy_sz  @boot/bootutil/src/swap_scratch.c:658:9
+                boot_scratch_area_size  @boot/bootutil/src/swap_scratch.c:565:18
+                  flash_area_get_size  @boot/bootutil/src/swap_priv.h:109:12
+                boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:567:23
+            flash_area_read [flash] (see above)  @boot/bootutil/src/swap_scratch.c:1133:10
+        boot_slots_compatible  @boot/bootutil/src/loader.c:1475:9
+          boot_img_num_sectors  @boot/bootutil/src/swap_scratch.c:284:27
+          boot_img_num_sectors  @boot/bootutil/src/swap_scratch.c:285:29
+          boot_scratch_area_size (see above)  @boot/bootutil/src/swap_scratch.c:293:18
+          boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:308:20
+          boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:309:20
+          boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:313:20
+          boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:324:34
+        boot_status_reset  @boot/bootutil/src/loader.c:1476:9
+        swap_read_status  @boot/bootutil/src/loader.c:1479:14
+          swap_status_source  @boot/bootutil/src/swap_misc.c:165:18
+            boot_read_swap_state  @boot/bootutil/src/swap_scratch.c:489:10
+              boot_magic_off (see above)  @boot/bootutil/src/bootutil_public.c:251:11
+              flash_area_read [flash] (see above)  @boot/bootutil/src/bootutil_public.c:252:10
+              bootutil_buffer_is_erased  @boot/bootutil/src/bootutil_public.c:256:9
+                flash_area_erased_val [flash]  @boot/bootutil/src/bootutil_public.c:207:18
+              boot_magic_decode  @boot/bootutil/src/bootutil_public.c:259:24
+                memcmp [no definition in build]  @boot/bootutil/src/bootutil_misc.h:22:9
+              boot_swap_info_off (see above)  @boot/bootutil/src/bootutil_public.c:262:11
+              flash_area_read [flash] (see above)  @boot/bootutil/src/bootutil_public.c:263:10
+              bootutil_buffer_is_erased (see above)  @boot/bootutil/src/bootutil_public.c:272:9
+              boot_read_copy_done  @boot/bootutil/src/bootutil_public.c:278:10
+                boot_copy_done_off (see above)  @boot/bootutil/src/bootutil_public.c:238:12
+                boot_read_flag  @boot/bootutil/src/bootutil_public.c:238:12
+                  flash_area_read [flash] (see above)  @boot/bootutil/src/bootutil_public.c:222:10
+                  bootutil_buffer_is_erased (see above)  @boot/bootutil/src/bootutil_public.c:226:9
+                  boot_flag_decode  @boot/bootutil/src/bootutil_public.c:229:17
+              boot_read_image_ok  @boot/bootutil/src/bootutil_public.c:283:12
+                boot_image_ok_off (see above)  @boot/bootutil/src/bootutil_public.c:399:12
+                boot_read_flag (see above)  @boot/bootutil/src/bootutil_public.c:399:12
+            boot_read_swap_state (see above)  @boot/bootutil/src/swap_scratch.c:494:10
+            boot_magic_compatible_check  @boot/bootutil/src/swap_scratch.c:505:13
+            boot_magic_compatible_check  @boot/bootutil/src/swap_scratch.c:508:13
+          swap_read_status_bytes  @boot/bootutil/src/swap_misc.c:187:10
+            boot_status_off  @boot/bootutil/src/swap_scratch.c:199:11
+              flash_area_align [flash] (see above)  @boot/bootutil/src/bootutil_misc.c:128:15
+              flash_area_get_id  @boot/bootutil/src/bootutil_misc.c:131:9
+              boot_scratch_trailer_sz  @boot/bootutil/src/bootutil_misc.c:132:24
+                boot_status_entry_sz  @boot/bootutil/src/bootutil_area.c:99:12
+              boot_trailer_sz  @boot/bootutil/src/bootutil_misc.c:135:24
+                boot_status_sz  @boot/bootutil/src/bootutil_area.c:93:12
+                  boot_status_entry_sz  @boot/bootutil/src/bootutil_area.c:87:38
+              flash_area_get_size  @boot/bootutil/src/bootutil_misc.c:140:5
+            boot_status_entries  @boot/bootutil/src/swap_scratch.c:200:19
+              flash_area_get_id  @boot/bootutil/src/bootutil_misc.c:111:9
+              __flash_area_ids_for_slot  @boot/bootutil/src/bootutil_misc.c:115:35
+              __flash_area_ids_for_slot  @boot/bootutil/src/bootutil_misc.c:116:35
+            flash_area_read [flash] (see above)  @boot/bootutil/src/swap_scratch.c:209:14
+            bootutil_buffer_is_erased (see above)  @boot/bootutil/src/swap_scratch.c:215:13
+          boot_swap_info_off (see above)  @boot/bootutil/src/swap_misc.c:189:15
+          flash_area_read [flash] (see above)  @boot/bootutil/src/swap_misc.c:190:14
+          bootutil_buffer_is_erased (see above)  @boot/bootutil/src/swap_misc.c:196:13
+        boot_read_image_headers (see above)  @boot/bootutil/src/loader.c:1494:14
+        boot_status_is_reset  @boot/bootutil/src/loader.c:1494:46
+        boot_status_is_reset  @boot/bootutil/src/loader.c:1513:14
+        boot_complete_partial_swap  @boot/bootutil/src/loader.c:1528:18
+          boot_swap_image  @boot/bootutil/src/loader.c:1338:10
+            boot_status_is_reset  @boot/bootutil/src/loader.c:1141:9
+            boot_img_hdr  @boot/bootutil/src/loader.c:1146:15
+            boot_read_image_size  @boot/bootutil/src/loader.c:1148:18
+              boot_img_hdr  @boot/bootutil/src/bootutil_misc.c:397:11
+              flash_area_read [flash] (see above)  @boot/bootutil/src/bootutil_misc.c:399:9
+              flash_area_read [flash] (see above)  @boot/bootutil/src/bootutil_misc.c:411:13
+            boot_img_hdr  @boot/bootutil/src/loader.c:1169:15
+            boot_read_image_size (see above)  @boot/bootutil/src/loader.c:1171:18
+            boot_find_status (see above)  @boot/bootutil/src/loader.c:1204:15
+            boot_read_swap_size (see above)  @boot/bootutil/src/loader.c:1206:14
+            flash_area_close [flash]  @boot/bootutil/src/loader.c:1224:9
+            swap_run  @boot/bootutil/src/loader.c:1227:5
+              find_last_sector_idx (see above)  @boot/bootutil/src/swap_scratch.c:929:23
+              boot_copy_sz (see above)  @boot/bootutil/src/swap_scratch.c:933:14
+              boot_swap_sectors  @boot/bootutil/src/swap_scratch.c:935:13
+                boot_img_sector_off  @boot/bootutil/src/swap_scratch.c:707:15
+                  flash_sector_get_off  @boot/bootutil/src/bootutil_priv.h:503:12
+                  flash_sector_get_off  @boot/bootutil/src/bootutil_priv.h:504:12
+                boot_trailer_sz (see above)  @boot/bootutil/src/swap_scratch.c:710:18
+                boot_get_first_trailer_sector  @boot/bootutil/src/swap_scratch.c:726:9
+                  boot_img_num_sectors  @boot/bootutil/src/swap_scratch.c:63:35
+                  boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:64:24
+                  boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:70:21
+                boot_img_sector_off (see above)  @boot/bootutil/src/swap_scratch.c:730:9
+                flash_area_get_size  @boot/bootutil/src/swap_scratch.c:731:19
+                boot_status_off (see above)  @boot/bootutil/src/swap_scratch.c:739:31
+                flash_area_get_size  @boot/bootutil/src/swap_scratch.c:750:14
+                boot_erase_region  @boot/bootutil/src/swap_scratch.c:750:14
+                  flash_area_get_size  @boot/bootutil/src/bootutil_area.c:204:16
+                  flash_area_get_sector  @boot/bootutil/src/bootutil_area.c:215:18
+                  flash_sector_get_off  @boot/bootutil/src/bootutil_area.c:221:26
+                  flash_area_get_sector (see above)  @boot/bootutil/src/bootutil_area.c:229:18
+                  flash_sector_get_off  @boot/bootutil/src/bootutil_area.c:235:26
+                  flash_area_get_sector (see above)  @boot/bootutil/src/bootutil_area.c:243:18
+                  flash_sector_get_off  @boot/bootutil/src/bootutil_area.c:250:19
+                  flash_sector_get_size  @boot/bootutil/src/bootutil_area.c:251:21
+                  flash_area_erase [flash]  @boot/bootutil/src/bootutil_area.c:253:18
+                  mcuboot_watchdog_feed [no definition in build]  @boot/bootutil/src/bootutil_area.c:259:13
+                swap_status_init  @boot/bootutil/src/swap_scratch.c:758:18
+                  boot_read_swap_state (see above)  @boot/bootutil/src/swap_misc.c:123:10
+                  boot_write_swap_info  @boot/bootutil/src/swap_misc.c:128:14
+                    boot_swap_info_off (see above)  @boot/bootutil/src/bootutil_public.c:415:11
+                    boot_write_trailer  @boot/bootutil/src/bootutil_public.c:421:12
+                      flash_area_align [flash] (see above)  @boot/bootutil/src/bootutil_public.c:356:13
+                      flash_area_erased_val [flash] (see above)  @boot/bootutil/src/bootutil_public.c:363:18
+                      memset [no definition in build]  @boot/bootutil/src/bootutil_public.c:366:5
+                      flash_area_write [flash]  @boot/bootutil/src/bootutil_public.c:368:10
+                  boot_write_image_ok  @boot/bootutil/src/swap_misc.c:133:14
+                    boot_image_ok_off (see above)  @boot/bootutil/src/bootutil_public.c:389:11
+                    boot_write_trailer_flag  @boot/bootutil/src/bootutil_public.c:393:12
+                      boot_write_trailer (see above)  @boot/bootutil/src/bootutil_public.c:381:12
+                  boot_write_swap_size  @boot/bootutil/src/swap_misc.c:137:10
+                    boot_swap_size_off (see above)  @boot/bootutil/src/bootutil_misc.c:299:11
+                    boot_write_trailer (see above)  @boot/bootutil/src/bootutil_misc.c:303:12
+                  boot_write_magic  @boot/bootutil/src/swap_misc.c:151:10
+                    boot_magic_off (see above)  @boot/bootutil/src/bootutil_public.c:311:11
+                    flash_area_erased_val [flash] (see above)  @boot/bootutil/src/bootutil_public.c:322:18
+                    flash_area_write [flash] (see above)  @boot/bootutil/src/bootutil_public.c:330:10
+                swap_scramble_trailer_sectors  @boot/bootutil/src/swap_scratch.c:766:22
+                  boot_trailer_scramble_offset  @boot/bootutil/src/swap_misc.c:87:10
+                    flash_area_align [flash] (see above)  @boot/bootutil/src/bootutil_area.c:169:21
+                    flash_area_align [flash] (see above)  @boot/bootutil/src/bootutil_area.c:170:21
+                    flash_area_get_sector (see above)  @boot/bootutil/src/bootutil_area.c:177:15
+                    flash_area_get_size  @boot/bootutil/src/bootutil_area.c:177:41
+                    boot_trailer_sz (see above)  @boot/bootutil/src/bootutil_area.c:177:67
+                    flash_sector_get_off  @boot/bootutil/src/bootutil_area.c:183:16
+                  boot_scramble_region  @boot/bootutil/src/swap_misc.c:91:10
+                    boot_erase_region (see above)  @boot/bootutil/src/bootutil_area.c:307:14
+                  flash_area_get_size  @boot/bootutil/src/swap_misc.c:91:42
+                swap_status_init (see above)  @boot/bootutil/src/swap_scratch.c:769:22
+                flash_area_get_size  @boot/bootutil/src/swap_scratch.c:773:22
+                boot_erase_region (see above)  @boot/bootutil/src/swap_scratch.c:773:22
+                boot_copy_region  @boot/bootutil/src/swap_scratch.c:779:14
+                  flash_area_read [flash] (see above)  @boot/bootutil/src/loader.c:856:14
+                  flash_area_write [flash] (see above)  @boot/bootutil/src/loader.c:911:14
+                  mcuboot_watchdog_feed [no definition in build]  @boot/bootutil/src/loader.c:918:9
+                boot_write_status  @boot/bootutil/src/swap_scratch.c:783:14
+                  boot_status_off (see above)  @boot/bootutil/src/loader.c:441:11
+                  boot_status_internal_off  @boot/bootutil/src/loader.c:442:11
+                  flash_area_align [flash] (see above)  @boot/bootutil/src/loader.c:443:13
+                  flash_area_erased_val [flash] (see above)  @boot/bootutil/src/loader.c:444:18
+                  memset [no definition in build]  @boot/bootutil/src/loader.c:445:5
+                  flash_area_write [flash] (see above)  @boot/bootutil/src/loader.c:452:10
+                swap_scramble_trailer_sectors (see above)  @boot/bootutil/src/swap_scratch.c:798:18
+                boot_get_first_trailer_sector (see above)  @boot/bootutil/src/swap_scratch.c:806:21
+                boot_img_sector_off (see above)  @boot/bootutil/src/swap_scratch.c:809:21
+                boot_erase_region (see above)  @boot/bootutil/src/swap_scratch.c:816:18
+                boot_copy_region (see above)  @boot/bootutil/src/swap_scratch.c:820:14
+                boot_write_status (see above)  @boot/bootutil/src/swap_scratch.c:824:14
+                swap_scramble_trailer_sectors (see above)  @boot/bootutil/src/swap_scratch.c:838:18
+                boot_img_sector_off (see above)  @boot/bootutil/src/swap_scratch.c:843:17
+                boot_erase_region (see above)  @boot/bootutil/src/swap_scratch.c:849:18
+                boot_copy_region (see above)  @boot/bootutil/src/swap_scratch.c:856:14
+                boot_status_off (see above)  @boot/bootutil/src/swap_scratch.c:861:35
+                boot_copy_region (see above)  @boot/bootutil/src/swap_scratch.c:864:18
+                boot_read_swap_state (see above)  @boot/bootutil/src/swap_scratch.c:869:18
+                boot_write_image_ok (see above)  @boot/bootutil/src/swap_scratch.c:873:22
+                boot_write_swap_info (see above)  @boot/bootutil/src/swap_scratch.c:878:22
+                boot_write_swap_size (see above)  @boot/bootutil/src/swap_scratch.c:883:18
+                boot_write_magic (see above)  @boot/bootutil/src/swap_scratch.c:889:18
+                boot_write_status (see above)  @boot/bootutil/src/swap_scratch.c:901:14
+                flash_area_get_size  @boot/bootutil/src/swap_scratch.c:912:18
+                boot_scramble_region (see above)  @boot/bootutil/src/swap_scratch.c:912:18
+          swap_set_image_ok  @boot/bootutil/src/loader.c:1348:14
+            flash_area_open [flash] (see above)  @boot/bootutil/src/swap_misc.c:233:10
+            __flash_area_ids_for_slot  @boot/bootutil/src/swap_misc.c:233:26
+            boot_read_swap_state (see above)  @boot/bootutil/src/swap_misc.c:239:10
+            boot_write_image_ok (see above)  @boot/bootutil/src/swap_misc.c:246:14
+            flash_area_close [flash]  @boot/bootutil/src/swap_misc.c:250:5
+          swap_set_copy_done  @boot/bootutil/src/loader.c:1355:14
+            flash_area_open [flash] (see above)  @boot/bootutil/src/swap_misc.c:215:10
+            __flash_area_ids_for_slot  @boot/bootutil/src/swap_misc.c:215:26
+            boot_write_copy_done  @boot/bootutil/src/swap_misc.c:221:10
+              boot_copy_done_off (see above)  @boot/bootutil/src/bootutil_public.c:499:11
+              boot_write_trailer_flag (see above)  @boot/bootutil/src/bootutil_public.c:503:12
+            flash_area_close [flash]  @boot/bootutil/src/swap_misc.c:222:5
+        boot_read_image_headers (see above)  @boot/bootutil/src/loader.c:1545:18
+        boot_validated_swap_type  @boot/bootutil/src/loader.c:1553:41
+          boot_swap_type_multi  @boot/bootutil/src/loader.c:734:17
+            boot_read_swap_state_by_id  @boot/bootutil/src/bootutil_public.c:437:14
+              flash_area_open [flash] (see above)  @boot/bootutil/src/bootutil_public.c:292:10
+              boot_read_swap_state (see above)  @boot/bootutil/src/bootutil_public.c:297:10
+              flash_area_close [flash]  @boot/bootutil/src/bootutil_public.c:298:5
+            __flash_area_ids_for_slot  @boot/bootutil/src/bootutil_public.c:437:41
+            boot_read_swap_state_by_id (see above)  @boot/bootutil/src/bootutil_public.c:444:10
+            __flash_area_ids_for_slot  @boot/bootutil/src/bootutil_public.c:444:37
+            boot_magic_compatible_check  @boot/bootutil/src/bootutil_public.c:461:13
+            boot_magic_compatible_check  @boot/bootutil/src/bootutil_public.c:463:13
+          boot_validate_slot  @boot/bootutil/src/loader.c:739:9
+            boot_img_hdr  @boot/bootutil/src/loader.c:558:11
+            boot_check_header_erased  @boot/bootutil/src/loader.c:559:9
+              boot_img_hdr  @boot/bootutil/src/bootutil_loader.c:61:11
+              bootutil_buffer_is_erased (see above)  @boot/bootutil/src/bootutil_loader.c:62:9
+            swap_scramble_trailer_sectors (see above)  @boot/bootutil/src/loader.c:572:13
+            boot_check_header_valid  @boot/bootutil/src/loader.c:634:10
+              boot_img_hdr  @boot/bootutil/src/bootutil_loader.c:79:11
+              boot_u32_safe_add  @boot/bootutil/src/bootutil_loader.c:84:10
+              boot_u32_safe_add  @boot/bootutil/src/bootutil_loader.c:93:14
+              flash_area_get_size  @boot/bootutil/src/bootutil_loader.c:98:17
+            boot_check_image  @boot/bootutil/src/loader.c:641:13
+              boot_img_hdr  @boot/bootutil/src/bootutil_loader.c:172:11
+              bootutil_img_validate  @boot/bootutil/src/bootutil_loader.c:193:5
+                bootutil_img_hash  @boot/bootutil/src/image_validate.c:283:10
+                  bootutil_sha_init  @boot/bootutil/src/bootutil_img_hash.c:114:5
+                    tc_sha256_init [crypto]  @boot/bootutil/include/bootutil/crypto/sha.h:207:5
+                  bootutil_sha_update  @boot/bootutil/src/bootutil_img_hash.c:119:9
+                    tc_sha256_update [crypto]  @boot/bootutil/include/bootutil/crypto/sha.h:225:12
+                  flash_area_read [flash] (see above)  @boot/bootutil/src/bootutil_img_hash.c:167:14
+                  bootutil_sha_update (see above)  @boot/bootutil/src/bootutil_img_hash.c:189:9
+                  bootutil_sha_finish  @boot/bootutil/src/bootutil_img_hash.c:193:5
+                    tc_sha256_final [crypto]  @boot/bootutil/include/bootutil/crypto/sha.h:235:12
+                bootutil_tlv_iter_begin  @boot/bootutil/src/image_validate.c:311:10
+                  flash_area_read [flash] (see above)  @boot/bootutil/src/tlv.c:62:9
+                  flash_area_read [flash] (see above)  @boot/bootutil/src/tlv.c:71:13
+                bootutil_max_image_size  @boot/bootutil/src/image_validate.c:325:18
+                  app_max_size  @boot/bootutil/src/bootutil_misc.c:362:12
+                    boot_img_num_sectors  @boot/bootutil/src/swap_scratch.c:957:27
+                    boot_img_num_sectors  @boot/bootutil/src/swap_scratch.c:958:29
+                    boot_scratch_area_size (see above)  @boot/bootutil/src/swap_scratch.c:961:18
+                    boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:979:20
+                    boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:980:20
+                    boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:984:20
+                    boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:995:20
+                    app_max_size_adjust_to_trailer  @boot/bootutil/src/swap_scratch.c:1024:12
+                      boot_trailer_sz (see above)  @boot/bootutil/src/swap_scratch.c:106:30
+                      get_first_trailer_sector_end_off  @boot/bootutil/src/swap_scratch.c:113:9
+                        boot_get_first_trailer_sector (see above)  @boot/bootutil/src/swap_scratch.c:90:35
+                        boot_img_sector_off (see above)  @boot/bootutil/src/swap_scratch.c:92:12
+                        boot_img_sector_size (see above)  @boot/bootutil/src/swap_scratch.c:93:12
+                      get_first_trailer_sector_end_off (see above)  @boot/bootutil/src/swap_scratch.c:115:9
+                      boot_scratch_trailer_sz (see above)  @boot/bootutil/src/swap_scratch.c:153:33
+                bootutil_tlv_iter_next  @boot/bootutil/src/image_validate.c:336:14
+                  flash_area_read [flash] (see above)  @boot/bootutil/src/tlv.c:126:14
+                bootutil_tlv_iter_is_prot  @boot/bootutil/src/image_validate.c:349:14
+                flash_area_read [flash] (see above)  @boot/bootutil/src/image_validate.c:374:18
+                boot_fih_memequal  @boot/bootutil/src/image_validate.c:379:13
+                  memcmp [no definition in build]  @boot/bootutil/src/bootutil_misc.c:83:12
+                flash_area_read [flash] (see above)  @boot/bootutil/src/image_validate.c:402:18
+                bootutil_find_key  @boot/bootutil/src/image_validate.c:406:22
+                  bootutil_sha_init  @boot/bootutil/src/bootutil_find_key.c:72:9
+                    tc_sha256_init [crypto] (see above)  @boot/bootutil/include/bootutil/crypto/sha.h:207:5
+                  bootutil_sha_update  @boot/bootutil/src/bootutil_find_key.c:73:9
+                    tc_sha256_update [crypto] (see above)  @boot/bootutil/include/bootutil/crypto/sha.h:225:12
+                  bootutil_sha_finish  @boot/bootutil/src/bootutil_find_key.c:74:9
+                    tc_sha256_final [crypto] (see above)  @boot/bootutil/include/bootutil/crypto/sha.h:235:12
+                  memcmp [no definition in build]  @boot/bootutil/src/bootutil_find_key.c:76:14
+                flash_area_read [flash] (see above)  @boot/bootutil/src/image_validate.c:435:18
+                bootutil_verify_sig  @boot/bootutil/src/image_validate.c:441:13
+                  mcuboot_mldsa_verify [crypto]  @boot/bootutil/src/image_mldsa.c:77:10
+            boot_scramble_slot  @boot/bootutil/src/loader.c:653:13
+              flash_area_get_size  @boot/bootutil/src/bootutil_area.c:373:12
+              boot_scramble_region (see above)  @boot/bootutil/src/bootutil_area.c:374:11
+        boot_validate_slot (see above)  @boot/bootutil/src/loader.c:1555:17
+      boot_perform_update  @boot/bootutil/src/loader.c:1853:22
+        boot_swap_image (see above)  @boot/bootutil/src/loader.c:1274:14
+        swap_set_image_ok (see above)  @boot/bootutil/src/loader.c:1285:14
+        swap_set_copy_done (see above)  @boot/bootutil/src/loader.c:1311:14
+      swap_set_image_ok (see above)  @boot/bootutil/src/loader.c:1865:18
+      boot_read_image_headers (see above)  @boot/bootutil/src/loader.c:1911:18
+      boot_validate_slot (see above)  @boot/bootutil/src/loader.c:1924:9
+      boot_add_shared_data  @boot/bootutil/src/loader.c:1955:14
+      fill_rsp  @boot/bootutil/src/loader.c:1971:5
+        flash_area_get_device_id  @boot/bootutil/src/loader.c:136:28
+        boot_img_slot_off  @boot/bootutil/src/loader.c:137:25
+          flash_area_get_off  @boot/bootutil/src/bootutil_priv.h:466:12
+        boot_img_hdr  @boot/bootutil/src/loader.c:138:19
+      boot_close_all_flash_areas  @boot/bootutil/src/loader.c:1986:5
+        flash_area_close [flash]  @boot/bootutil/src/bootutil_loader.c:366:9
+        flash_area_close [flash]  @boot/bootutil/src/bootutil_loader.c:378:17
+    boot_state_clear  @boot/bootutil/src/loader.c:2486:5
+  do_boot  @boot/zephyr/main.c:707:5
+    flash_device_base  @boot/zephyr/main.c:174:10
+    cleanup_arm_interrupts  @boot/zephyr/main.c:194:5
+    __indirect_call [indirect call]  @boot/zephyr/main.c:294:6

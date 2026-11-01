@@ -1,0 +1,13 @@
+{
+ "date": "2026-11-02",
+ "step": "ChkUp step 1 (execution path recovery) on MCUboot, ML-DSA",
+ "exp_commit": "27da898 (+ uncommitted boot_conf/callgraph.conf, scripts/callgraph_paths.py)",
+ "mcuboot_commit": "6a809c68",
+ "zephyr": "",
+ "gcc": "arm-zephyr-eabi-gcc (Zephyr SDK 1.0.1) 14.3.0",
+ "builds": ["scripts/build_boot.sh mldsa44 callgraph", "scripts/build_boot.sh mldsa65 callgraph", "scripts/build_boot.sh mldsa87 callgraph"],
+ "compiler_opt": "-fcallgraph-info -fno-inline -fno-inline-small-functions -fno-inline-functions-called-once",
+ "commands": ["python3 scripts/callgraph_paths.py build/boot_<conf>_callgraph --entry main --out <this dir>/<conf>",
+              "python3 scripts/callgraph_paths.py build/boot_<conf>_callgraph --entry boot_go > <this dir>/<conf>/tree_boot_go.txt"],
+ "board_used": false
+}
