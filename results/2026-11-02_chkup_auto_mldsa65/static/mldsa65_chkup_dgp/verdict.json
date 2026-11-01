@@ -1,0 +1,516 @@
+{
+ "kconfig": {
+  "BOOT_VALIDATE_SLOT0": "y",
+  "MCUBOOT_DOWNGRADE_PREVENTION": "y",
+  "MCUBOOT_DOWNGRADE_PREVENTION_SECURITY_COUNTER": "n",
+  "MCUBOOT_HW_DOWNGRADE_PREVENTION": "n",
+  "MCUBOOT_USE_TLV_ALLOW_LIST": "y",
+  "BOOT_SWAP_USING_SCRATCH": "y",
+  "BOOT_UPGRADE_ONLY": "n"
+ },
+ "verdict": {
+  "authenticity": {
+   "verdict": "ok",
+   "procedures": [
+    "bootutil_verify_sig -> mcuboot_mldsa_verify"
+   ],
+   "validated_slots": [
+    "0",
+    "1"
+   ]
+  },
+  "integrity": {
+   "verdict": "ok",
+   "procedures": [
+    "bootutil_sha_finish -> tc_sha256_final"
+   ],
+   "validated_slots": [
+    "0",
+    "1"
+   ]
+  },
+  "freshness": {
+   "verdict": "ok",
+   "procedures": [
+    "check_downgrade_prevention -> boot_compare_version"
+   ]
+  },
+  "compatibility": {
+   "verdict": "missing",
+   "procedures": []
+  },
+  "P5_unsigned_field_use": {
+   "verdict": "ok",
+   "type_reads_not_protected": [],
+   "any_reads_without_allow_list": []
+  },
+  "P6_rollback_value_protection": {
+   "verdict": "ok",
+   "sources": [
+    "image header ih_ver (covered by the image hash -> signed)"
+   ],
+   "strict_counter_compare": []
+  }
+ },
+ "alerts": [
+  {
+   "property": "compatibility",
+   "kind": "missing",
+   "detail": "missing"
+  }
+ ],
+ "procedures": [
+  {
+   "property": "freshness",
+   "key_function": "boot_compare_version",
+   "proper": true,
+   "caller": "check_downgrade_prevention",
+   "line": 1697,
+   "chain": "main -> boot_go -> context_boot_go -> check_downgrade_prevention",
+   "reaches_condition": true,
+   "first_condition": "check_downgrade_prevention:1701: if (rc_9 < 0)",
+   "decision_reaches": "boot_go",
+   "hops": [
+    {
+     "func": "check_downgrade_prevention",
+     "depth": 0,
+     "via": "data",
+     "conds": [
+      "1701: if (rc_9 < 0)"
+     ],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "context_boot_go",
+     "depth": 1,
+     "via": "ret",
+     "conds": [
+      "1841: if (_6 != 0)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "boot_go",
+     "depth": 2,
+     "via": "ctrl",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    }
+   ]
+  },
+  {
+   "property": "authenticity",
+   "key_function": "mcuboot_mldsa_verify",
+   "proper": true,
+   "caller": "bootutil_verify_sig",
+   "line": 77,
+   "chain": "main -> boot_go -> context_boot_go -> boot_prepare_image_for_update -> boot_validated_swap_type -> boot_validate_slot -> boot_check_image -> bootutil_img_validate -> bootutil_verify_sig",
+   "reaches_condition": true,
+   "first_condition": "bootutil_verify_sig:261: if (rc_8 != 0)",
+   "decision_reaches": "boot_go",
+   "hops": [
+    {
+     "func": "bootutil_verify_sig",
+     "depth": 0,
+     "via": "data",
+     "conds": [
+      "261: if (rc_8 != 0)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "bootutil_img_validate",
+     "depth": 1,
+     "via": "ctrl",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "boot_check_image",
+     "depth": 2,
+     "via": "ret",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "boot_validate_slot",
+     "depth": 3,
+     "via": "ret",
+     "conds": [
+      "647: if (FIH_SUCCESS.1430_14 != fih_rc_15)"
+     ],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "boot_validated_swap_type",
+     "depth": 4,
+     "via": "ret",
+     "conds": [
+      "740: if (FIH_SUCCESS.1060_1 != fih_rc_12)",
+      "741: if (FIH_NO_BOOTABLE_IMAGE.1061_2 == fih_rc_12)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "boot_prepare_image_for_update",
+     "depth": 4,
+     "via": "ret",
+     "conds": [
+      "1557: if (fih_rc_25 != FIH_SUCCESS.861_46)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "context_boot_go",
+     "depth": 4,
+     "via": "ret",
+     "conds": [
+      "1928: if (fih_rc_24 != FIH_SUCCESS.523_56)",
+      "1928: if (fih_rc_24 == pretmp_62)",
+      "1929: if (fih_rc_24 == FIH_NO_BOOTABLE_IMAGE.525_58)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "boot_prepare_image_for_update",
+     "depth": 5,
+     "via": "ctrl",
+     "conds": [],
+     "ret": false,
+     "out_params": [
+      0
+     ]
+    },
+    {
+     "func": "boot_go",
+     "depth": 5,
+     "via": "ctrl",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "context_boot_go",
+     "depth": 6,
+     "via": "out",
+     "conds": [
+      "1834: switch (_5)",
+      "1855: if (rc_31 != 0)",
+      "1876: if (_7 == 255)",
+      "1902: if (_7 != 1)"
+     ],
+     "ret": false,
+     "out_params": [
+      0
+     ]
+    },
+    {
+     "func": "boot_go",
+     "depth": 7,
+     "via": "ctrl",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    }
+   ]
+  },
+  {
+   "property": "integrity",
+   "key_function": "tc_sha256_final",
+   "proper": true,
+   "caller": "bootutil_sha_finish",
+   "line": 235,
+   "chain": "main -> boot_go -> context_boot_go -> boot_prepare_image_for_update -> boot_validated_swap_type -> boot_validate_slot -> boot_check_image -> bootutil_img_validate -> bootutil_find_key -> bootutil_sha_finish",
+   "reaches_condition": true,
+   "first_condition": "bootutil_find_key:76: if (_19 == 0)",
+   "decision_reaches": "boot_go",
+   "hops": [
+    {
+     "func": "bootutil_sha_finish",
+     "depth": 0,
+     "via": "data",
+     "conds": [],
+     "ret": false,
+     "out_params": [
+      1
+     ]
+    },
+    {
+     "func": "bootutil_find_key",
+     "depth": 1,
+     "via": "out",
+     "conds": [
+      "76: if (_19 == 0)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "bootutil_img_validate",
+     "depth": 2,
+     "via": "ctrl",
+     "conds": [
+      "426: if (key_id_77 < 0)",
+      "426: if (key_id_77 >= bootutil_key_cnt.901_78)"
+     ],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "boot_check_image",
+     "depth": 3,
+     "via": "ret",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "boot_validate_slot",
+     "depth": 4,
+     "via": "ret",
+     "conds": [
+      "647: if (FIH_SUCCESS.1430_14 != fih_rc_15)"
+     ],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "boot_validated_swap_type",
+     "depth": 5,
+     "via": "ret",
+     "conds": [
+      "740: if (FIH_SUCCESS.1060_1 != fih_rc_12)",
+      "741: if (FIH_NO_BOOTABLE_IMAGE.1061_2 == fih_rc_12)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "boot_prepare_image_for_update",
+     "depth": 5,
+     "via": "ret",
+     "conds": [
+      "1557: if (fih_rc_25 != FIH_SUCCESS.861_46)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "context_boot_go",
+     "depth": 5,
+     "via": "ret",
+     "conds": [
+      "1928: if (fih_rc_24 != FIH_SUCCESS.523_56)",
+      "1928: if (fih_rc_24 == pretmp_62)",
+      "1929: if (fih_rc_24 == FIH_NO_BOOTABLE_IMAGE.525_58)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "boot_prepare_image_for_update",
+     "depth": 6,
+     "via": "ctrl",
+     "conds": [],
+     "ret": false,
+     "out_params": [
+      0
+     ]
+    },
+    {
+     "func": "boot_go",
+     "depth": 6,
+     "via": "ctrl",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "context_boot_go",
+     "depth": 7,
+     "via": "out",
+     "conds": [
+      "1834: switch (_5)",
+      "1855: if (rc_31 != 0)",
+      "1876: if (_7 == 255)",
+      "1902: if (_7 != 1)"
+     ],
+     "ret": false,
+     "out_params": [
+      0
+     ]
+    },
+    {
+     "func": "boot_go",
+     "depth": 8,
+     "via": "ctrl",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    }
+   ]
+  },
+  {
+   "property": "integrity",
+   "key_function": "tc_sha256_final",
+   "proper": true,
+   "caller": "bootutil_sha_finish",
+   "line": 235,
+   "chain": "main -> boot_go -> context_boot_go -> boot_prepare_image_for_update -> boot_validated_swap_type -> boot_validate_slot -> boot_check_image -> bootutil_img_validate -> bootutil_find_key -> bootutil_sha_finish",
+   "reaches_condition": true,
+   "first_condition": "bootutil_img_validate:380: if (FIH_SUCCESS.673_11 != fih_rc_30)",
+   "decision_reaches": "boot_go",
+   "hops": [
+    {
+     "func": "bootutil_sha_finish",
+     "depth": 0,
+     "via": "data",
+     "conds": [],
+     "ret": false,
+     "out_params": [
+      1
+     ]
+    },
+    {
+     "func": "bootutil_img_hash",
+     "depth": 1,
+     "via": "out",
+     "conds": [],
+     "ret": false,
+     "out_params": [
+      5
+     ]
+    },
+    {
+     "func": "bootutil_img_validate",
+     "depth": 2,
+     "via": "out",
+     "conds": [
+      "380: if (FIH_SUCCESS.673_11 != fih_rc_30)"
+     ],
+     "ret": true,
+     "out_params": [
+      7
+     ]
+    },
+    {
+     "func": "boot_check_image",
+     "depth": 3,
+     "via": "ret",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "boot_validate_slot",
+     "depth": 4,
+     "via": "ret",
+     "conds": [
+      "647: if (FIH_SUCCESS.1430_14 != fih_rc_15)"
+     ],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "boot_validated_swap_type",
+     "depth": 5,
+     "via": "ret",
+     "conds": [
+      "740: if (FIH_SUCCESS.1060_1 != fih_rc_12)",
+      "741: if (FIH_NO_BOOTABLE_IMAGE.1061_2 == fih_rc_12)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "boot_prepare_image_for_update",
+     "depth": 5,
+     "via": "ret",
+     "conds": [
+      "1557: if (fih_rc_25 != FIH_SUCCESS.861_46)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "context_boot_go",
+     "depth": 5,
+     "via": "ret",
+     "conds": [
+      "1928: if (fih_rc_24 != FIH_SUCCESS.523_56)",
+      "1928: if (fih_rc_24 == pretmp_62)",
+      "1929: if (fih_rc_24 == FIH_NO_BOOTABLE_IMAGE.525_58)"
+     ],
+     "ret": false,
+     "out_params": []
+    },
+    {
+     "func": "boot_prepare_image_for_update",
+     "depth": 6,
+     "via": "ctrl",
+     "conds": [],
+     "ret": false,
+     "out_params": [
+      0
+     ]
+    },
+    {
+     "func": "boot_go",
+     "depth": 6,
+     "via": "ctrl",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    },
+    {
+     "func": "context_boot_go",
+     "depth": 7,
+     "via": "out",
+     "conds": [
+      "1834: switch (_5)",
+      "1855: if (rc_31 != 0)",
+      "1876: if (_7 == 255)",
+      "1902: if (_7 != 1)"
+     ],
+     "ret": false,
+     "out_params": [
+      0
+     ]
+    },
+    {
+     "func": "boot_go",
+     "depth": 8,
+     "via": "ctrl",
+     "conds": [],
+     "ret": true,
+     "out_params": []
+    }
+   ]
+  }
+ ],
+ "tlv_reads": [
+  {
+   "func": "bootutil_img_validate",
+   "line": 311,
+   "type": "IMAGE_TLV_ANY",
+   "protected_only": false
+  }
+ ],
+ "is_prot_checks": [
+  {
+   "func": "bootutil_img_validate",
+   "line": 349,
+   "checked": true
+  }
+ ]
+}

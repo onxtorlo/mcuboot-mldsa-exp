@@ -1,0 +1,12 @@
+# captured 2026-11-02T06:16:37 label= run=
+*** Booting MCUboot v2.4.0-4-g6a809c6822a0 ***
+*** Using Zephyr OS build dccb09599635 ***
+I: Starting bootloader
+I: Primary image: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Scratch: magic=unset, swap_type=0x1, copy_done=0x3, image_ok=0x3
+I: Boot source: primary slot
+I: Image index: 0, Swap type: perm
+I: Starting swap using scratch algorithm.
+I: Bootloader chainload address offset: 0x20000
+I: Image version: v2.0.0
+I: Jumping to the first image slot

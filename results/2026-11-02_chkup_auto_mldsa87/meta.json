@@ -1,0 +1,10 @@
+{
+ "date": "2026-11-02",
+ "what": "ChkUp automated pipeline on MCUboot, ML-DSA-87",
+ "exp_commit": "b7ac543 (+ chkup.sh/chkup_validate.py/chkup_report.py/chkup_revalidate.sh, committed with these results)",
+ "mcuboot_commit": "6a809c68",
+ "zephyr": "dccb0959 release: Zephyr 4.4.2",
+ "gcc": "arm-zephyr-eabi-gcc (Zephyr SDK 1.0.1) 14.3.0",
+ "board": "STM32F429I-DISC1 (ST-Link via usbipd, /dev/ttyACM0)",
+ "command": "scripts/chkup.sh mldsa87 mcuboot-mldsa-exp/results/2026-11-02_chkup_auto_mldsa87 --board --negative base"
+}

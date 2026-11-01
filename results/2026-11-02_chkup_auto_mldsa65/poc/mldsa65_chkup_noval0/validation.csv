@@ -1,0 +1,7 @@
+case,property,alert,poc,attack_succeeds_if,observed,attack_succeeded,result,markers
+baseline,baseline,-,legitimate upgrade v1/cnt1 -> v2/cnt5,v2,v2,True,ok,swap;jump
+slot0_tamper,authenticity,partial,"running image (slot0) modified, no upgrade",v1-tampered,v1-tampered,True,TP,jump
+slot0_tamper_integrity,integrity,partial,"running image (slot0) modified, no upgrade",v1-tampered,v1-tampered,True,TP,jump
+fresh_older,freshness,missing,older validly signed image (2.0.0/cnt5 -> 1.0.0/cnt1),v1,v1,True,TP,swap;jump
+comp_otherboard,compatibility,missing,"image built for another board, signed with the same key",accepted,accepted,True,TP,swap;jump
+p5_inject,P5,-,TLV injected in the unprotected area,v2,v1,False,TN,rejected;jump

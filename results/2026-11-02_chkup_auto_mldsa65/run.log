@@ -1,0 +1,236 @@
+chkup.sh mldsa65 --board --negative base dgp dgp_seccnt hwdgp noval0 noallow dgp_seccnt+noallow overwrite overwrite+dgp (2026-11-02T04:17:36+09:00)
+== base (mldsa65)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | ok | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | ok | bootutil_sha_finish -> tc_sha256_final |
+| freshness | missing | - |
+| compatibility | missing | - |
+| P5_unsigned_field_use | ok | - |
+| P6_rollback_value_protection | n/a (no freshness check) | - |
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+fresh_older        freshness     missing   expect-if-attack v1           got v1           TP
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+p5_inject          P5            -         expect-if-attack v2           got v1           TN
+== dgp (mldsa65_chkup_dgp)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | ok | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | ok | bootutil_sha_finish -> tc_sha256_final |
+| freshness | ok | check_downgrade_prevention -> boot_compare_version |
+| compatibility | missing | - |
+| P5_unsigned_field_use | ok | - |
+| P6_rollback_value_protection | ok | image header ih_ver (covered by the image hash -> signed) |
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+fresh_older        freshness     -         expect-if-attack v1           got v2           TN
+fresh_setver       freshness     -         expect-if-attack v1           got v2           TN
+p5_inject          P5            -         expect-if-attack v2           got v1           TN
+p6_equal_counter   P6            -         expect-if-attack v1           got v2           TN
+p6_unprot_counter  P6            -         expect-if-attack v1           got v2           TN
+== dgp_seccnt (mldsa65_chkup_dgp_seccnt)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | ok | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | ok | bootutil_sha_finish -> tc_sha256_final |
+| freshness | ok | check_downgrade_prevention -> bootutil_get_img_security_cnt |
+| compatibility | missing | - |
+| P5_unsigned_field_use | ok | - |
+| P6_rollback_value_protection | improper (equal security counter accepted: older image with the same counter installs) | SEC_CNT TLV, protected area only |
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+p6_equal_counter   P6            improper  expect-if-attack v1           got v1           TP
+p6_unprot_counter  P6            improper  expect-if-attack v1           got v2           FP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+fresh_older        freshness     -         expect-if-attack v1           got v2           TN
+fresh_setver       freshness     -         expect-if-attack v1           got v2           TN
+p5_inject          P5            -         expect-if-attack v2           got v1           TN
+== hwdgp (mldsa65_chkup_hwdgp)
+   analysis build did not link (see build/boot_mldsa65_chkup_hwdgp_callgraph.build.log)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | ok | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | ok | bootutil_sha_finish -> tc_sha256_final |
+| freshness | ok | boot_update_security_counter -> bootutil_get_img_security_cnt; bootutil_img_validate -> boot_nv_security_counter_get |
+| compatibility | missing | - |
+| P5_unsigned_field_use | ok | - |
+| P6_rollback_value_protection | improper (equal security counter accepted: older image with the same counter installs) | SEC_CNT TLV, protected area only; boot_nv_security_counter_get |
+   not flashable (build failed) -> no board validation
+== noval0 (mldsa65_chkup_noval0)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | partial (upgrade only; primary slot not re-validated at boot) | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | partial (upgrade only; primary slot not re-validated at boot) | bootutil_sha_finish -> tc_sha256_final |
+| freshness | missing | - |
+| compatibility | missing | - |
+| P5_unsigned_field_use | ok | - |
+| P6_rollback_value_protection | n/a (no freshness check) | - |
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+slot0_tamper       authenticity  partial   expect-if-attack v1-tampered  got v1-tampered  TP
+slot0_tamper_integrity integrity     partial   expect-if-attack v1-tampered  got v1-tampered  TP
+fresh_older        freshness     missing   expect-if-attack v1           got v1           TP
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+p5_inject          P5            -         expect-if-attack v2           got v1           TN
+== noallow (mldsa65_chkup_noallow)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | ok | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | ok | bootutil_sha_finish -> tc_sha256_final |
+| freshness | missing | - |
+| compatibility | missing | - |
+| P5_unsigned_field_use | improper (unprotected TLVs not restricted) | bootutil_img_validate:311 IMAGE_TLV_ANY |
+| P6_rollback_value_protection | n/a (no freshness check) | - |
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+fresh_older        freshness     missing   expect-if-attack v1           got v1           TP
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+p5_inject          P5            improper  expect-if-attack v2           got v2           TP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+== dgp_seccnt+noallow (mldsa65_chkup_dgp_seccnt_chkup_noallow)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | ok | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | ok | bootutil_sha_finish -> tc_sha256_final |
+| freshness | ok | check_downgrade_prevention -> bootutil_get_img_security_cnt |
+| compatibility | missing | - |
+| P5_unsigned_field_use | improper (unprotected TLVs not restricted) | bootutil_img_validate:311 IMAGE_TLV_ANY |
+| P6_rollback_value_protection | improper (equal security counter accepted: older image with the same counter installs) | SEC_CNT TLV, protected area only |
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+p5_inject          P5            improper  expect-if-attack v2           got v2           TP
+p6_equal_counter   P6            improper  expect-if-attack v1           got v1           TP
+p6_unprot_counter  P6            improper  expect-if-attack v1           got v2           FP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+fresh_older        freshness     -         expect-if-attack v1           got v2           TN
+fresh_setver       freshness     -         expect-if-attack v1           got v2           TN
+== overwrite (mldsa65_chkup_overwrite)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | ok | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | ok | bootutil_sha_finish -> tc_sha256_final |
+| freshness | missing | - |
+| compatibility | missing | - |
+| P5_unsigned_field_use | ok | - |
+| P6_rollback_value_protection | n/a (no freshness check) | - |
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+fresh_older        freshness     missing   expect-if-attack v1           got v1           TP
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+fresh_setver       freshness     -         expect-if-attack v1           got v2           TN
+p5_inject          P5            -         expect-if-attack v2           got v1           TN
+== overwrite+dgp (mldsa65_chkup_overwrite_chkup_dgp)
+| property | verdict | verification procedures (caller -> key function) |
+|---|---|---|
+| authenticity | ok | bootutil_verify_sig -> mcuboot_mldsa_verify |
+| integrity | ok | bootutil_sha_finish -> tc_sha256_final |
+| freshness | ok | boot_validate_slot -> boot_compare_version |
+| compatibility | missing | - |
+| P5_unsigned_field_use | ok | - |
+| P6_rollback_value_protection | ok | image header ih_ver (covered by the image hash -> signed) |
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+fresh_older        freshness     -         expect-if-attack v1           got v2           TN
+fresh_setver       freshness     -         expect-if-attack v1           got v2           TN
+p5_inject          P5            -         expect-if-attack v2           got v1           TN
+p6_equal_counter   P6            -         expect-if-attack v1           got v2           TN
+p6_unprot_counter  P6            -         expect-if-attack v1           got v2           TN
+# ChkUp report — 2026-11-02_chkup_auto_mldsa65
+
+## 정적 판정 (1-3단계)
+
+| 빌드 | 진위 | 무결성 | 최신성 | 호환성 | P5 서명 외 필드 | P6 rollback 값 | 경보 |
+|---|---|---|---|---|---|---|---|
+| mldsa65 | ok | ok | **missing** | **missing** | ok | n/a | 2 |
+| mldsa65_chkup_dgp | ok | ok | ok | **missing** | ok | ok | 1 |
+| mldsa65_chkup_hwdgp | ok | ok | ok | **missing** | ok | **improper** | 2 |
+| mldsa65_chkup_noval0 | **partial** | **partial** | **missing** | **missing** | ok | n/a | 4 |
+| mldsa65_chkup_noallow | ok | ok | **missing** | **missing** | **improper** | n/a | 3 |
+| mldsa65_chkup_overwrite | ok | ok | **missing** | **missing** | ok | n/a | 2 |
+| mldsa65_chkup_dgp_seccnt | ok | ok | ok | **missing** | ok | **improper** | 2 |
+| mldsa65_chkup_overwrite_chkup_dgp | ok | ok | ok | **missing** | ok | ok | 1 |
+| mldsa65_chkup_dgp_seccnt_chkup_noallow | ok | ok | ok | **missing** | **improper** | **improper** | 3 |
+
+## 보드 검증 (4단계)
+
+| 빌드 | 경보 | TP | FP | 음성 검사 | TN | FN | 비고 |
+|---|---|---|---|---|---|---|---|
+| mldsa65 | 2 | 2 | 0 | 6 | 6 | 0 | baseline ok |
+report: /home/onxtorlo/secureboot/mcuboot-mldsa-exp/results/2026-11-02_chkup_auto_mldsa65/report.md
+chkup_revalidate.sh mldsa65 mldsa65_chkup_dgp_seccnt mldsa65_chkup_dgp_seccnt_chkup_noallow (2026-11-02T06:39:11+09:00)
+== revalidate mldsa65_chkup_dgp_seccnt
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+p6_equal_counter   P6            improper  expect-if-attack v1           got v1           TP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+fresh_older        freshness     -         expect-if-attack v1           got v2           TN
+fresh_setver       freshness     -         expect-if-attack v1           got v2           TN
+p5_inject          P5            -         expect-if-attack v2           got v1           TN
+p6_unprot_counter  P6            -         expect-if-attack v1           got v2           TN
+== revalidate mldsa65_chkup_dgp_seccnt_chkup_noallow
+baseline           baseline      -         expect-if-attack v2           got v2           ok
+comp_otherboard    compatibility missing   expect-if-attack accepted     got accepted     TP
+p5_inject          P5            improper  expect-if-attack v2           got v2           TP
+p6_equal_counter   P6            improper  expect-if-attack v1           got v1           TP
+auth_unsigned      authenticity  -         expect-if-attack v2           got v1           TN
+auth_wrongkey      authenticity  -         expect-if-attack v2           got v1           TN
+slot0_tamper       authenticity  -         expect-if-attack v1-tampered  got none         TN
+integ_modified     integrity     -         expect-if-attack v2-tampered  got v1           TN
+integ_rehash       integrity     -         expect-if-attack v2-tampered  got v1           TN
+fresh_older        freshness     -         expect-if-attack v1           got v2           TN
+fresh_setver       freshness     -         expect-if-attack v1           got v2           TN
+p6_unprot_counter  P6            -         expect-if-attack v1           got v2           TN
+# ChkUp report — 2026-11-02_chkup_auto_mldsa65
+
+## 정적 판정 (1-3단계)
+
+| 빌드 | 진위 | 무결성 | 최신성 | 호환성 | P5 서명 외 필드 | P6 rollback 값 | 경보 |
+|---|---|---|---|---|---|---|---|
+| mldsa65 | ok | ok | **missing** | **missing** | ok | n/a | 2 |
+| mldsa65_chkup_dgp | ok | ok | ok | **missing** | ok | ok | 1 |
+| mldsa65_chkup_hwdgp | ok | ok | ok | **missing** | ok | **improper** | 2 |
+| mldsa65_chkup_noval0 | **partial** | **partial** | **missing** | **missing** | ok | n/a | 4 |
+| mldsa65_chkup_noallow | ok | ok | **missing** | **missing** | **improper** | n/a | 3 |
+| mldsa65_chkup_overwrite | ok | ok | **missing** | **missing** | ok | n/a | 2 |
+| mldsa65_chkup_dgp_seccnt | ok | ok | ok | **missing** | ok | **improper** | 2 |
+| mldsa65_chkup_overwrite_chkup_dgp | ok | ok | ok | **missing** | ok | ok | 1 |
+| mldsa65_chkup_dgp_seccnt_chkup_noallow | ok | ok | ok | **missing** | **improper** | **improper** | 3 |
+
+## 보드 검증 (4단계)
+
+| 빌드 | 경보 | TP | FP | 음성 검사 | TN | FN | 비고 |
+|---|---|---|---|---|---|---|---|
+| mldsa65 | 2 | 2 | 0 | 6 | 6 | 0 | baseline ok |

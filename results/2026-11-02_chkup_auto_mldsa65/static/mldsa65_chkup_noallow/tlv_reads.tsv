@@ -1,0 +1,2 @@
+func	line	type	protected_only
+bootutil_img_validate	311	IMAGE_TLV_ANY	False

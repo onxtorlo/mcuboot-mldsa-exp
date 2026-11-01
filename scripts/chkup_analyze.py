@@ -63,7 +63,7 @@ CORPUS = {
     # freshness (MCUboot-specific): version / security counter comparison
     "boot_compare_version": ("freshness", True, "ret"),
     "bootutil_get_img_security_cnt": ("freshness", True, ("out", 3)),
-    "boot_nv_security_counter_get": ("freshness", True, "ret"),
+    "boot_nv_security_counter_get": ("freshness", True, ("out", 1)),
     # compatibility (MCUboot-specific): inter-image dependency TLV
     "boot_verify_slot_dependencies": ("compatibility", True, "ret"),
 }
@@ -302,7 +302,7 @@ def follow(funcs, callers, start_f, seed_ssa, seed_roots, stop, max_depth=10, al
         seen.add(key)
         conds, ret_data, outp = trace(f, ss, rr, wr)
         hops.append({"func": canon(f.name), "depth": depth, "via": how,
-                     "conds": [f"{line}: {c}" for line, c in conds[:4]], "ret": ret_data,
+                     "conds": [f"{line}: {c}" for line, c in conds], "ret": ret_data,
                      "out_params": sorted(outp)})
         if conds and first_cond is None:
             first_cond = (canon(f.name), conds[0][0], conds[0][1])
@@ -466,9 +466,35 @@ def main():
                         else "SEC_CNT TLV, NOT restricted to the protected area")
         else:
             srcs.append(p["key_function"])
-    verdict["P6_rollback_value_protection"] = {
-        "verdict": "n/a (no freshness check)" if not fr else
-        ("ok" if all("NOT" not in s for s in srcs) else "vulnerable"), "sources": sorted(set(srcs))}
+    # P6 (comparison): a counter check of the form "old > new -> reject" lets an older image
+    # with the same counter through. Look for a strict comparison between two tainted values.
+    strict = set()
+    for p in fr:
+        if p["key_function"] not in ("bootutil_get_img_security_cnt", "boot_nv_security_counter_get"):
+            continue
+        for h in p["hops"]:
+            for c in h["conds"]:
+                m = re.search(r"if \((\S+) (<|>|<=|>=) (\S+)\)", c)
+                if m and SSA.fullmatch(m.group(1)) and SSA.fullmatch(m.group(3)) and m.group(2) in "<>":
+                    strict.add(f"{h['func']}:{c}")
+    if not fr:
+        p6 = "n/a (no freshness check)"
+    elif any("NOT" in s for s in srcs):
+        p6 = "improper (rollback value read from unprotected data)"
+    elif strict:
+        p6 = "improper (equal security counter accepted: older image with the same counter installs)"
+    else:
+        p6 = "ok"
+    verdict["P6_rollback_value_protection"] = {"verdict": p6, "sources": sorted(set(srcs)),
+                                               "strict_counter_compare": sorted(strict)}
+
+    # alerts = every non-ok verdict; step 4 picks PoCs from these
+    short = {"P5_unsigned_field_use": "P5", "P6_rollback_value_protection": "P6"}
+    alerts = []
+    for k, v in verdict.items():
+        kind = v["verdict"].split()[0]
+        if kind in ("missing", "improper", "partial"):
+            alerts.append({"property": short.get(k, k), "kind": kind, "detail": v["verdict"]})
 
     os.makedirs(a.out, exist_ok=True)
     with open(os.path.join(a.out, "procedures.tsv"), "w") as fo:
@@ -481,7 +507,7 @@ def main():
         fo.write("func\tline\ttype\tprotected_only\n")
         for t in tlv_reads:
             fo.write(f"{t['func']}\t{t['line']}\t{t['type']}\t{t['protected_only']}\n")
-    json.dump({"kconfig": kc, "verdict": verdict, "procedures": procs, "tlv_reads": tlv_reads,
+    json.dump({"kconfig": kc, "verdict": verdict, "alerts": alerts, "procedures": procs, "tlv_reads": tlv_reads,
                "is_prot_checks": is_prot}, open(os.path.join(a.out, "verdict.json"), "w"), indent=1)
 
     lines = [f"# ChkUp verdict — {os.path.basename(os.path.normpath(a.build_dir))}", "",
@@ -503,6 +529,8 @@ def main():
     lines += [f"| {t['func']}:{t['line']} | {t['type']} | {t['protected_only']} |" for t in tlv_reads]
     lines += ["", "allow-list check (bootutil_tlv_iter_is_prot -> condition): " +
               (", ".join(f"{i['func']}:{i['line']}={i['checked']}" for i in is_prot) or "none on path")]
+    open(os.path.join(a.out, "verdict.md"), "w").write("\n".join(lines) + "\n")
+    lines += ["", "## Alerts", ""] + [f"- {x['property']}: {x['detail']}" for x in alerts]
     open(os.path.join(a.out, "verdict.md"), "w").write("\n".join(lines) + "\n")
     print("\n".join(lines[:6 + len(verdict)]))
 

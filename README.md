@@ -131,3 +131,29 @@ $S/measure_boot.sh rsa2048 rsa2048_measure 10 mcuboot-mldsa-exp/results/<date>_<
 | 1 bit flipped in code | rejected, `result=hash_mismatch` |
 | 1 bit flipped in signature | rejected, `result=bad_sig` |
 | Signed with another key | rejected, `result=no_key` |
+
+## ChkUp: update-verification checker (run from `~/secureboot`)
+
+ChkUp (Wu et al., USENIX Security 2024) adapted to MCUboot: for each Kconfig variant it
+recovers the boot/update path, finds the verification procedures, judges authenticity /
+integrity / freshness / compatibility (+ P5 unsigned-field use, P6 rollback value), and
+validates every alert on the board with a PoC image.
+
+```bash
+S=mcuboot-mldsa-exp/scripts
+# static only (steps 1-3), default variants: base dgp dgp_seccnt hwdgp noval0 noallow
+$S/chkup.sh mldsa65 mcuboot-mldsa-exp/results/<date>_chkup
+# + board validation of the alerts, + PoCs for properties without an alert (false negatives)
+$S/chkup.sh mldsa65 mcuboot-mldsa-exp/results/<date>_chkup --board --negative base dgp overwrite+dgp
+```
+
+| step | script | what |
+|---|---|---|
+| 1 | `callgraph_paths.py` | call graph of an analysis build (`boot_conf/callgraph.conf`), `main` -> `do_boot` |
+| 2-3 | `chkup_analyze.py` | key functions (corpus), result/out-buffer -> condition on GIMPLE SSA, verdicts + alerts |
+| 4 | `chkup_validate.py`, `chkup_images.py` | PoC per alert (ChkUp Table 2); attack image runs = TP, rejected = FP |
+| all | `chkup.sh`, `chkup_report.py` | build variants, run steps, `report.md` |
+| step 4 again | `chkup_revalidate.sh <outdir> <conf> <build>...` | re-run board PoCs of an existing run with the current validator, rewrite `report.md` |
+
+Variants are `boot_conf/chkup_<name>.conf`; `a+b` combines fragments. The board run needs the
+ST-Link attached to WSL (`usbipd attach --wsl --busid 1-4 --auto-attach` on Windows keeps it).
