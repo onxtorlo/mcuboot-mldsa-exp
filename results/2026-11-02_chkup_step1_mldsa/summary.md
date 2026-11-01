@@ -33,7 +33,7 @@
 - 핵심 함수 대조: 검증·설치·종료 함수 모두 경로에 포함
 - 경로에 없는 함수
   - `boot_copy_image`: overwrite-only 모드 전용 → swap-scratch 설정에 없음, 정상
-  - `boot_version_cmp`, `boot_update_security_counter`: downgrade prevention 비활성 → 최신성(버전·보안 카운터) 검증 코드 자체가 경로에 없음
+  - `boot_compare_version`(SW), `boot_update_security_counter`(HW): downgrade prevention 비활성 → 최신성(버전·보안 카운터) 검증 코드 자체가 경로에 없음
     - ChkUp 기준 "최신성 검증 누락" 후보 → 3단계 판정 대상
 
 ## 다음 단계

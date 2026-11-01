@@ -1,0 +1,96 @@
+== up_other.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17372, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17884, 'unprotected_info_off': 17884, 'unprotected_tot': 3389, 'hashed_end': 17884}
+  unprotected type 0x0010 len   32 at 0x45e4
+  unprotected type 0x0001 len   32 at 0x4608
+  unprotected type 0x0027 len 3309 at 0x462c
+== up_v1_10.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '1.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== up_v1_10_sc1.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 12, 'img_size': 17456, 'flags': 0, 'version': '1.0.0+0', 'tlv_off': 17968, 'protected_info_off': 17968, 'protected_tot': 12, 'unprotected_info_off': 17980, 'unprotected_tot': 3389, 'hashed_end': 17980}
+  protected   type 0x0050 len    4 at 0x4638
+  unprotected type 0x0010 len   32 at 0x4644
+  unprotected type 0x0001 len   32 at 0x4668
+  unprotected type 0x0027 len 3309 at 0x468c
+== up_v1_10_sc1_inject.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 12, 'img_size': 17456, 'flags': 0, 'version': '1.0.0+0', 'tlv_off': 17968, 'protected_info_off': 17968, 'protected_tot': 12, 'unprotected_info_off': 17980, 'unprotected_tot': 3397, 'hashed_end': 17980}
+  protected   type 0x0050 len    4 at 0x4638
+  unprotected type 0x0010 len   32 at 0x4644
+  unprotected type 0x0001 len   32 at 0x4668
+  unprotected type 0x0027 len 3309 at 0x468c
+  unprotected type 0x0050 len    4 at 0x537d
+== up_v1_10_sc5.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 12, 'img_size': 17456, 'flags': 0, 'version': '1.0.0+0', 'tlv_off': 17968, 'protected_info_off': 17968, 'protected_tot': 12, 'unprotected_info_off': 17980, 'unprotected_tot': 3389, 'hashed_end': 17980}
+  protected   type 0x0050 len    4 at 0x4638
+  unprotected type 0x0010 len   32 at 0x4644
+  unprotected type 0x0001 len   32 at 0x4668
+  unprotected type 0x0027 len 3309 at 0x468c
+== up_v1_setver3.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '3.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== up_v2_20.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== up_v2_20_sc5.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 12, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'protected_info_off': 17968, 'protected_tot': 12, 'unprotected_info_off': 17980, 'unprotected_tot': 3389, 'hashed_end': 17980}
+  protected   type 0x0050 len    4 at 0x4638
+  unprotected type 0x0010 len   32 at 0x4644
+  unprotected type 0x0001 len   32 at 0x4668
+  unprotected type 0x0027 len 3309 at 0x468c
+== up_v2_flip.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== up_v2_inject.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3397, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+  unprotected type 0x0050 len    4 at 0x5371
+== up_v2_rehash.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== up_v2_unsigned.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 40, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+== up_v2_wrongkey.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== v1_10.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '1.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== v1_10_sc1.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 12, 'img_size': 17456, 'flags': 0, 'version': '1.0.0+0', 'tlv_off': 17968, 'protected_info_off': 17968, 'protected_tot': 12, 'unprotected_info_off': 17980, 'unprotected_tot': 3389, 'hashed_end': 17980}
+  protected   type 0x0050 len    4 at 0x4638
+  unprotected type 0x0010 len   32 at 0x4644
+  unprotected type 0x0001 len   32 at 0x4668
+  unprotected type 0x0027 len 3309 at 0x468c
+== v1_tampered.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '1.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== v2_20.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 0, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'unprotected_info_off': 17968, 'unprotected_tot': 3389, 'hashed_end': 17968}
+  unprotected type 0x0010 len   32 at 0x4638
+  unprotected type 0x0001 len   32 at 0x465c
+  unprotected type 0x0027 len 3309 at 0x4680
+== v2_20_sc5.bin
+{'load': 0, 'hdr_size': 512, 'prot_size': 12, 'img_size': 17456, 'flags': 0, 'version': '2.0.0+0', 'tlv_off': 17968, 'protected_info_off': 17968, 'protected_tot': 12, 'unprotected_info_off': 17980, 'unprotected_tot': 3389, 'hashed_end': 17980}
+  protected   type 0x0050 len    4 at 0x4638
+  unprotected type 0x0010 len   32 at 0x4644
+  unprotected type 0x0001 len   32 at 0x4668
+  unprotected type 0x0027 len 3309 at 0x468c

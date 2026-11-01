@@ -1,0 +1,4 @@
+/* ChkUp compatibility PoC: drop the board's own flash layout so boot_conf/<board>.overlay applies */
+&flash0 {
+	/delete-node/ partitions;
+};

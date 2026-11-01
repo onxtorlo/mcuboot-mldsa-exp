@@ -1,0 +1,23 @@
+{
+ "date": "2026-11-02",
+ "what": "ChkUp (USENIX Sec 2024) steps 1-4 on MCUboot, ML-DSA-65",
+ "exp_commit": "05c2d06 (+ uncommitted chkup scripts/confs)",
+ "mcuboot_commit": "6a809c68",
+ "zephyr": "dccb0959 release: Zephyr 4.4.2",
+ "gcc": "arm-zephyr-eabi-gcc (Zephyr SDK 1.0.1) 14.3.0",
+ "board": "STM32F429I-DISC1 (ST-Link via usbipd, /dev/ttyACM0)",
+ "static": {
+  "builds": "scripts/build_boot.sh mldsa65 [chkup_dgp|chkup_dgp_seccnt|chkup_hwdgp|chkup_noval0|chkup_noallow] callgraph",
+  "command": "python3 scripts/chkup_analyze.py build/boot_<name>_callgraph --out static/<name>",
+  "note": "chkup_hwdgp does not link (no boot_nv_security_counter_* port for this board); static analysis uses its compiled objects"
+ },
+ "poc": {
+  "builds": "scripts/build_boot.sh mldsa65 [chkup_dgp|chkup_dgp_seccnt|chkup_dgp_seccnt chkup_noallow|chkup_noallow|chkup_noval0]",
+  "apps": [
+   "scripts/build_app.sh v1",
+   "scripts/build_app.sh v2",
+   "west build -b nucleo_f429zi apps/hello -d build/hello_nucleo -- -DAPP_TAG=other -DEXTRA_DTC_OVERLAY_FILE=apps/hello/drop_partitions.overlay;boot_conf/stm32f429i_disc1.overlay;apps/hello/slot0.overlay"
+  ],
+  "command": "scripts/chkup_poc.sh mldsa65 results/2026-11-02_chkup_mldsa65/poc"
+ }
+}

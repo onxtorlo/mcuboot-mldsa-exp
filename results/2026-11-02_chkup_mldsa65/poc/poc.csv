@@ -1,0 +1,20 @@
+case,boot,property,poc,expected,observed,verdict,markers
+B0,mldsa65,sanity,"legit upgrade v1->v2",v2,v2,PASS,swap;jump;
+B1,mldsa65,authenticity-missing,"unsigned image",v1,v1,PASS,rejected;jump;
+B2,mldsa65,integrity-missing,"1 bit flipped in code",v1,v1,PASS,rejected;jump;
+B3,mldsa65,freshness-missing,"older valid image (2.0.0 -> 1.0.0)",v1,v1,PASS,swap;jump;
+B4,mldsa65,compatibility-missing,"image for another board, same key",swap,swap,PASS,swap;jump;
+B5,mldsa65,authenticity-improper,"signed with another ML-DSA key",v1,v1,PASS,rejected;jump;
+B6,mldsa65,integrity-improper,"bit flip + SHA256 TLV replaced",v1,v1,PASS,rejected;jump;
+B7,mldsa65,freshness-improper,"older image, header version set to 3.0.0",v2,v2,PASS,rejected;jump;
+B8,mldsa65,P5 unsigned-field,"SEC_CNT TLV injected in unprotected area",v1,v1,PASS,rejected;jump;
+B9,mldsa65,integrity (slot0),"slot0 payload modified, no upgrade",none,none,PASS,rejected;no-bootable;
+D0,mldsa65_chkup_dgp,sanity,"legit upgrade v1->v2",v2,v2,PASS,swap;jump;
+D3,mldsa65_chkup_dgp,freshness,"older valid image (2.0.0 -> 1.0.0)",v2,v2,PASS,downgrade-erased;jump;
+D7,mldsa65_chkup_dgp,freshness-improper,"older image, header version set to 3.0.0",v2,v2,PASS,rejected;jump;
+S0,mldsa65_chkup_dgp_seccnt,sanity,"legit upgrade, counter 1->5",v2,v2,PASS,swap;jump;
+S3,mldsa65_chkup_dgp_seccnt,freshness,"counter 5 -> 1",v2,v2,PASS,downgrade-erased;jump;
+S4,mldsa65_chkup_dgp_seccnt,P6 rollback value,"older version, equal counter 5 -> 5",v1,v1,PASS,swap;jump;
+SN,mldsa65_chkup_dgp_seccnt_chkup_noallow,P6 rollback value,"counter 5 -> 1 + unprotected SEC_CNT=10",v2,v2,PASS,downgrade-erased;jump;
+N8,mldsa65_chkup_noallow,P5 unsigned-field,"SEC_CNT TLV injected in unprotected area",v2,v2,PASS,swap;jump;
+V9,mldsa65_chkup_noval0,integrity (slot0),"slot0 payload modified, no upgrade",v1-tampered,v1-tampered,PASS,jump;
